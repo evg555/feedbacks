@@ -1,0 +1,107 @@
+h1{
+    font-weight:bold;
+}
+.header, .content{
+    margin-top:30px;
+}
+a.login{
+    text-decoration: none;
+    font-size: 18px;
+}
+a.login:hover{
+    text-decoration: underline;
+}
+a.login, a.login:active, a.login:visited, a.login:link{
+    color: #000;
+}
+.content, .sidebar{
+    margin: 50px 0 100px;
+}
+.feedbacks .feedbacks-item{
+    margin: 50px 0;
+}
+.feedback-info{
+    width:45%;
+}
+.contacts, .date{
+    float:left;
+}
+.contacts p, .date p{
+    padding: 0;
+    margin: 0;
+    font-size: 14px;|
+}
+.contacts p.email{
+    font-style: italic;
+}
+.date{
+    float:right;
+}
+.feedback-text p{
+    padding-top: 10px;
+    margin: 0;
+}
+.feedback-text small{
+    font-size: 12px;
+    font-style:italic;
+}
+form{
+    width: 300px;
+    margin: 30px auto 0;
+}
+form h3{
+    margin: 15px 0;
+    text-align: center
+}
+input,textarea{
+    padding: 5px;
+    display: block;
+    width: 300px;
+    margin: 5px auto;
+}
+label{
+    margin: 10px 0 0 0;
+}
+.preview, .send, #loginForm button{
+    display: block;
+    width: 120px;
+    height:34px;
+    padding:5px 10px;
+    font-weight:bold;
+    text-transform: uppercase
+}
+.preview{
+    float: left;
+    color: #0069d9;
+}
+.send, #loginForm button{
+    float: right;
+    color: #fff;
+    background-color: #0069d9;
+    border:1px solid #0069d9;
+    border-radius: 3px;
+}
+.send:hover, #loginForm button:hover{
+    text-decoration: none;
+    color: #fff;
+    background-color: #08519f;
+    border:1px solid #08519f;
+    cursor:pointer;
+}
+.preview:hover{
+    text-decoration: none;
+    color: #08519f;
+}
+.buttons{
+    margin-top: 30px;
+}
+.sidebar a{
+    display: block;
+    text-decoration: none;
+}
+.sidebar a:hover{
+    text-decoration: none;
+}
+.sidebar{
+    padding-left: 50px;
+}

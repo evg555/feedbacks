@@ -1,0 +1,36 @@
+.feedback-text{
+    float:left;
+    width: 80%;
+}
+.feedback-status{
+    float: right;
+}
+.send{
+    float: none;
+    margin-top: 50px;
+}
+.content{
+    margin: 0 0 100px 0;
+}
+.feedback-status .allow:hover,.feedback-status .deny:hover{
+    text-decoration: none;
+}
+.feedback-status .allow{
+    color: green;
+}
+.feedback-status .deny{
+    color: red;
+}
+.feedback-status span{
+    color: gray;
+}
+.thumb {
+    width: 60px;
+    height: 60px;
+    float: left;
+    margin-right: 15px;
+}
+.feedback-text p:hover{
+    cursor: pointer;
+    background-color: rgb(226, 244, 245);
+}
