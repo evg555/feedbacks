@@ -7,13 +7,13 @@
     <!-- JQuery files -->
     <script src="js/jquery-3.2.1.min.js"></script>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?=TEMPLATE_DIR_URL?>/css/font-awesome.min.css">
     <!-- Bootstrap files -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="<?=TEMPLATE_DIR_URL?>/css/bootstrap.min.css">
+    <script src="<?=TEMPLATE_DIR_URL?>/js/bootstrap.min.js"></script>
     <!-- Custom files -->
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/custom.js"></script>
+    <link rel="stylesheet" href="<?=TEMPLATE_DIR_URL?>/css/style.css">
+    <script src="<?=TEMPLATE_DIR_URL?>/js/custom.js"></script>
 </head>
 <body>
     <div class="container">
@@ -23,75 +23,29 @@
             </div>
             <div class="col-lg-2">
                 <i class="fa fa-user-o" aria-hidden="true"></i>
-                <a class="login" href="login.php">Вход в панель</a>
+                <a class="login" href="/login">Вход в панель</a>
             </div>
         </div>
         <div class="row content">
             <div class="col-lg-9 feedbacks">
-                <div class="feedbacks-item">
-                    <div class="feedback-info">
-                        <div class="contacts">
-                            <p class="author">Автор</p>
-                            <p class="email">e-mail</p>
+                <? foreach ($data as $feedback) :?>
+                    <div class="feedbacks-item">
+                        <div class="feedback-info">
+                            <div class="contacts">
+                                <p class="author"><?=$feedback['name']?></p>
+                                <p class="email"><?=$feedback['email']?></p>
+                            </div>
+                            <div class="date">
+                                <p><?=$feedback['created']?></p>
+                            </div>
                         </div>
-                        <div class="date">
-                            <p>Дата создания</p>
-                        </div>
-                    </div>
-                    <div style="clear:both"></div>
-                    <div class="feedback-text">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, animi eius fuga incidunt ipsum natus nihil pariatur perferendis porro provident unde vero. Adipisci, cupiditate, non? Accusamus cum ex quod sint?</p>
-                        <small>*изменен администратором</small>
-                    </div>
-                </div>
-                <div class="feedbacks-item">
-                    <div class="feedback-info">
-                        <div class="contacts">
-                            <p class="author">Автор</p>
-                            <p class="email">e-mail</p>
-                        </div>
-                        <div class="date">
-                            <p>Дата создания</p>
+                        <div style="clear:both"></div>
+                        <div class="feedback-text">
+                            <p><?=$feedback['text']?></p>
+                            <small><?=(empty($feedback['changed']) ? "" : "*изменен администратором")?></small>
                         </div>
                     </div>
-                    <div style="clear:both"></div>
-                    <div class="feedback-text">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, animi eius fuga incidunt ipsum natus nihil pariatur perferendis porro provident unde vero. Adipisci, cupiditate, non? Accusamus cum ex quod sint?</p>
-                        <small>*изменен администратором</small>
-                    </div>
-                </div>
-                <div class="feedbacks-item">
-                    <div class="feedback-info">
-                        <div class="contacts">
-                            <p class="author">Автор</p>
-                            <p class="email">e-mail</p>
-                        </div>
-                        <div class="date">
-                            <p>Дата создания</p>
-                        </div>
-                    </div>
-                    <div style="clear:both"></div>
-                    <div class="feedback-text">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, animi eius fuga incidunt ipsum natus nihil pariatur perferendis porro provident unde vero. Adipisci, cupiditate, non? Accusamus cum ex quod sint?</p>
-                        <small>*изменен администратором</small>
-                    </div>
-                </div>
-                <div class="feedbacks-item">
-                    <div class="feedback-info">
-                        <div class="contacts">
-                            <p class="author">Автор</p>
-                            <p class="email">e-mail</p>
-                        </div>
-                        <div class="date">
-                            <p>Дата создания</p>
-                        </div>
-                    </div>
-                    <div style="clear:both"></div>
-                    <div class="feedback-text">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, animi eius fuga incidunt ipsum natus nihil pariatur perferendis porro provident unde vero. Adipisci, cupiditate, non? Accusamus cum ex quod sint?</p>
-                        <small>*изменен администратором</small>
-                    </div>
-                </div>
+                <?endforeach;?>
                 <form action="">
                     <h3>Оставить отзыв</h3>
                     <input name ='name'type="text" required placeholder="Имя">

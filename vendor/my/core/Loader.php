@@ -10,6 +10,7 @@ class Loader
      * @param string $class
      */
     public function autoLoad($class){
+        //Gjlrk.xftv
         $arr = explode("\\",$class);
         $className = array_pop($arr);
         $prefix = implode("/",$arr);

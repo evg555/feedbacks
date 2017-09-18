@@ -2,6 +2,7 @@
 use vendor\my\core\Loader;
 use vendor\my\core\Route;
 
+require "vendor/my/core/config.php";
 require "vendor/my/core/Loader.php";
 
 $loader = new Loader();

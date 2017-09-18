@@ -5,7 +5,7 @@ namespace app\controllers;
 
 class AdminController
 {
-    public function index(){
-        echo "Раздел статей";
+    protected function render($data){
+        include TEMPLATE_DIR . "/admin.php";
     }
 }

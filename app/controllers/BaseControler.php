@@ -13,7 +13,9 @@ abstract class BaseControler
     /**
      * Экшен по умолчанию
      */
-    abstract public function index();
+    public function index(){
+        $this->render($this->_data);
+    }
 
     /**
      * Передаем переменные и рендерим страницу
