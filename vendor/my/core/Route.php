@@ -12,7 +12,8 @@ class Route
         $routes = [
             '/' => ['controller' => 'Main','action' => 'index'],
             '/login' => ['controller' => 'Login','action' => 'index'],
-            '/admin' => ['controller' => 'Admin','action' => 'index']
+            '/admin' => ['controller' => 'Admin','action' => 'index'],
+            '/ajax' => ['controller' => 'Ajax','action' => 'index']
         ];
 
         if ($routes[$url]){

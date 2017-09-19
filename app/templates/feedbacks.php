@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>Отзывы</title>
     <!-- JQuery files -->
-    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="<?=TEMPLATE_DIR_URL?>/js/jquery-3.2.1.min.js"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?=TEMPLATE_DIR_URL?>/css/font-awesome.min.css">
     <!-- Bootstrap files -->
@@ -61,9 +61,9 @@
             </div>
             <div class="col-lg-3 sidebar">
                 <h4>Сортировать по:</h4>
-                <a href="">дате</a>
-                <a href="">автору</a>
-                <a href="">e-mail</a>
+                <a href="?sort=byDate">дате</a>
+                <a href="?sort=byAuthor">автору</a>
+                <a href="?sort=byEmail">e-mail</a>
             </div>
         </div>
     </div>

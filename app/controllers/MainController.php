@@ -9,7 +9,12 @@ class MainController extends BaseControler
     {
         try {
             $db = Database::getInstance();
-            $this->_data = $db->getAllFeedbacks();
+
+            if (isset($_GET['sort'])){
+                $this->_data = $db->getAllFeedbacks($_GET['sort']);
+            } else {
+                $this->_data = $db->getAllFeedbacks();
+            }
 
             parent::index();
         } catch (\Exception $e){
