@@ -46,16 +46,17 @@
                         </div>
                     </div>
                 <?endforeach;?>
-                <form action="">
+                <form id="sendFeedback" method="post">
                     <h3>Оставить отзыв</h3>
-                    <input name ='name'type="text" required placeholder="Имя">
-                    <input name ='email'type="email" required placeholder="E-mail">
-                    <textarea name="text"  cols="30" rows="10" required placeholder="Текст сообщения"></textarea>
+                    <input name ='name'type="text"placeholder="Имя">
+                    <input name ='email'type="text"placeholder="E-mail">
+                    <textarea name="text"  cols="30" rows="10" placeholder="Текст сообщения"></textarea>
                     <label for="file">Прикрепить изображение</label>
                     <input name="file" type="file">
+                    <input type="text" name="action" value="sendfeedback" hidden>
                     <div class="buttons">
                         <a class="preview" href="">Просмотр</a>
-                        <a class="send" href="">Отправить</a>
+                        <button class="send">Отправить</button>
                     </div>
                 </form>
             </div>

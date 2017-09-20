@@ -20,11 +20,10 @@ class MainController extends BaseControler
         } catch (\Exception $e){
             echo $e->getMessage();
         }
-
-
     }
 
     protected function render($data){
         include TEMPLATE_DIR . "/feedbacks.php";
     }
+
 }

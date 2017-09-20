@@ -13,17 +13,22 @@ class Route
             '/' => ['controller' => 'Main','action' => 'index'],
             '/login' => ['controller' => 'Login','action' => 'index'],
             '/admin' => ['controller' => 'Admin','action' => 'index'],
-            '/ajax' => ['controller' => 'Ajax','action' => 'index']
+            '/send' => ['controller' => 'Ajax','action' => 'index']
         ];
 
-        if ($routes[$url]){
-            $controllerName = "\\app\\controllers\\".$routes[$url]['controller']."Controller";
-            $controller = new $controllerName();
-            $controller->$routes[$url]['action']();
-        } else {
-            $controller = new \app\controllers\MainController();
-            $controller->index();
+        try{
+         if ($routes[$url]){
+             $controllerName = "\\app\\controllers\\".$routes[$url]['controller']."Controller";
+             $controller = new $controllerName();
+             $controller->$routes[$url]['action']();
+         } else {
+             $controller = new \app\controllers\MainController();
+             $controller->index();
+         }
+        } catch (\Exception $e){
+         echo $e->getMessage();
         }
+
 
     }
 }
