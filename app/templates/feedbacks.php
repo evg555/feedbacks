@@ -55,7 +55,7 @@
                     <input name="file" type="file">
                     <input type="text" name="action" value="sendfeedback" hidden>
                     <div class="buttons">
-                        <a class="preview" href="">Просмотр</a>
+                        <a class="preview" href="">Предварительный просмотр</a>
                         <button class="send">Отправить</button>
                     </div>
                 </form>
