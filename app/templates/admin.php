@@ -23,107 +23,45 @@
             <h1>Административная панель</h1>
         </div>
         <div class="col-lg-2">
-            <span class="user">admin</span>
+            <span class="user"><?=$data['user']?></span>
             <i class="fa fa-user-o" aria-hidden="true"></i>
-            <a class="login" href="login.php">Выход</a>
+            <a class="login" href="?logout=true">Выход</a>
+            <a class="login" href="/">Вернуться на сайт</a>
         </div>
     </div>
     <a class="send" href="">Сохранить</a>
     <div class="row content">
         <div class="col-lg-12 feedbacks">
-            <div class="feedbacks-item">
-                <div class="feedback-info">
-                    <div class="thumb">
-                        <img src="" alt="">
+            <? foreach($data['feedbacks'] as $feed) :?>
+                <div class="feedbacks-item">
+                    <div class="feedback-info">
+                        <? if (!empty($feed['thumb'])):?>
+                            <div class="thumb">
+                                <img src="<?=TEMPLATE_DIR_URL . "/files/" . $feed['thumb']?>" alt="">
+                            </div>
+                         <?endif;?>
+                        <div class="contacts">
+                            <p class="author"><?=$feed['name']?></p>
+                            <p class="email"><?=$feed['email']?></p>
+                        </div>
+                        <div class="date">
+                            <p><?=$feed['created']?></p>
+                        </div>
                     </div>
-                    <div class="contacts">
-                        <p class="author">Автор</p>
-                        <p class="email">e-mail</p>
+                    <div style="clear:both"></div>
+                    <div class="feedback-text">
+                        <p><?=$feed['text']?></p>
                     </div>
-                    <div class="date">
-                        <p>Дата создания</p>
+                    <div class="feedback-status">
+                        <? if (empty($feed['accept'])):?>
+                            <a class="allow" href="">Принять</a>
+                        <? else :?>
+                            <a class="deny" href="">Отклонить</a>
+                        <?endif;?>
                     </div>
+                    <div style="clear:both"></div>
                 </div>
-                <div style="clear:both"></div>
-                <div class="feedback-text">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, animi eius fuga incidunt ipsum natus nihil pariatur perferendis porro provident unde vero. Adipisci, cupiditate, non? Accusamus cum ex quod sint?</p>
-                </div>
-                <div class="feedback-status">
-                    <a class="allow" href="">Принять</a> /
-                    <span>Отклонить</span>
-                </div>
-                <div style="clear:both"></div>
-            </div>
-            <div class="feedbacks-item">
-                <div class="feedback-info">
-                    <div class="thumb">
-                        <img src="" alt="">
-                    </div>
-                    <div class="contacts">
-                        <p class="author">Автор</p>
-                        <p class="email">e-mail</p>
-                    </div>
-                    <div class="date">
-                        <p>Дата создания</p>
-                    </div>
-                </div>
-                <div style="clear:both"></div>
-                <div class="feedback-text">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, animi eius fuga incidunt ipsum natus nihil pariatur perferendis porro provident unde vero. Adipisci, cupiditate, non? Accusamus cum ex quod sint?</p>
-                </div>
-                <div class="feedback-status">
-                    <a class="allow" href="">Принять</a> /
-                    <span>Отклонить</span>
-                </div>
-                <div style="clear:both"></div>
-            </div>
-            <div class="feedbacks-item">
-                <div class="feedback-info">
-                    <div class="thumb">
-                        <img src="" alt="">
-                    </div>
-                    <div class="contacts">
-                        <p class="author">Автор</p>
-                        <p class="email">e-mail</p>
-                    </div>
-                    <div class="date">
-                        <p>Дата создания</p>
-                    </div>
-                </div>
-                <div style="clear:both"></div>
-                <div class="feedback-text">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, animi eius fuga incidunt ipsum natus nihil pariatur perferendis porro provident unde vero. Adipisci, cupiditate, non? Accusamus cum ex quod sint?</p>
-                </div>
-                <div class="feedback-status">
-                    <span>Принять</span> /
-                    <a class="deny" href="">Отклонить</a>
-                </div>
-                <div style="clear:both"></div>
-            </div>
-            <div class="feedbacks-item">
-                <div class="feedback-info">
-                    <div class="thumb">
-                        <img src="" alt="">
-                    </div>
-                    <div class="contacts">
-                        <p class="author">Автор</p>
-                        <p class="email">e-mail</p>
-                    </div>
-                    <div class="date">
-                        <p>Дата создания</p>
-                    </div>
-                </div>
-                <div style="clear:both"></div>
-                <div class="feedback-text">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, animi eius fuga incidunt ipsum natus nihil pariatur perferendis porro provident unde vero. Adipisci, cupiditate, non? Accusamus cum ex quod sint?</p>
-                </div>
-                <div class="feedback-status">
-                    <a class="allow" href="">Принять</a> /
-                    <span>Отклонить</span>
-                </div>
-                <div style="clear:both"></div>
-            </div>
-
+            <?endforeach;?>
         </div>
         <a class="send" href="">Сохранить</a>
     </div>

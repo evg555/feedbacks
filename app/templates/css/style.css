@@ -19,6 +19,8 @@ a.login, a.login:active, a.login:visited, a.login:link{
 }
 .feedbacks .feedbacks-item{
     margin: 50px 0;
+    padding: 15px;
+    background-color: #f2f2f2;
 }
 .feedback-info{
     width:45%;
@@ -47,8 +49,9 @@ a.login, a.login:active, a.login:visited, a.login:link{
     font-weight:bold;
 }
 form{
-    width: 300px;
+    width: 305px;
     margin: 30px auto 0;
+    position: relative;
 }
 form h3{
     margin: 15px 0;
@@ -109,7 +112,21 @@ label{
     font-size: 16px;
     font-weight:bold;
 }
-.previewFeedback{
-    border: 2px dotted #0056b3;
-    padding: 5px;
+.feedback-image img{
+    width:320px;
+    height:240px;
+    margin-top: 10px;
+}
+.before-load{
+    display: none;
+    font-size: 70px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -35px 0 0 -35px;
+    z-index:999;
+}
+.preview-item{
+    display: none;
+    border: 3px dashed #0056b3;
 }

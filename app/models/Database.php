@@ -43,7 +43,7 @@ class Database
             'byEmail' => 'a.email'
         ];
 
-        $query = "SELECT a.email,a.name,f.text,DATE_FORMAT(f.created,'%d.%m.%Y') as 'created',f.changed FROM ".$this->_tableFeadbacks. " f
+        $query = "SELECT a.email,a.name,f.text,f.image,DATE_FORMAT(f.created,'%d.%m.%Y') as 'created',f.changed FROM ".$this->_tableFeadbacks. " f
                     LEFT JOIN ".$this->_tableAuthors." a USING (author_id)
                     WHERE f.accept = 1";
 
@@ -69,7 +69,7 @@ class Database
      * @param string $name,$email,$text,$file
      * return boolean
      */
-    public function addFeedback($name,$email,$text,$file){
+    public function addFeedback($name,$email,$text,$image = null,$thumb = null){
         //Проверяем наличие e-mail
         $query = "SELECT * FROM ".$this->_tableAuthors."
                     WHERE email = '$email'";
@@ -97,7 +97,7 @@ class Database
 
                 //Добавляем отзыв
                 $query = "INSERT INTO ".$this->_tableFeadbacks."
-                    SET author_id=$author_id, text='$text',created=now()";
+                    SET author_id=$author_id, text='$text',created=now(),image='$image',thumb='$thumb'";
 
                 return $this->query($query);
 
@@ -107,6 +107,48 @@ class Database
 
         return false;
 
+    }
+
+    /*
+     * Авторизация пользоватля
+     * @param string $login, $pass
+     * return boolean
+     */
+    public function authorize($login, $pass){
+
+        $query = "SELECT login, password FROM ".$this->_tableUsers."
+                    WHERE login = '$login'";
+
+        if ($result = $this->query($query)){
+            //Проверяем пароль
+            if (mysqli_fetch_assoc($result)['password'] == md5($pass)){
+                session_start();
+                $_SESSION['user'] = $login;
+                $_SESSION['authorized'] = true;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /*
+     * Получаем все тзывы в админку
+     * @return array
+     */
+    public function getFeedbacksForPanel(){
+        $query = "SELECT a.email,a.name,f.text,f.thumb,DATE_FORMAT(f.created,'%d.%m.%Y') as 'created',f.accept FROM ".$this->_tableFeadbacks. " f
+                    LEFT JOIN ".$this->_tableAuthors." a USING (author_id) ORDER BY f.created DESC";
+
+        if ($result = $this->query($query)){
+            while ($row = mysqli_fetch_assoc($result)){
+                $feeds[] = $row;
+            }
+            return $feeds;
+        } else {
+            return false;
+        }
     }
 
     /*

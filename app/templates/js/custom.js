@@ -1,13 +1,48 @@
 $(document).ready(function (){
 
     //Обработка формы добавления отзыва
-    var error = false;
-    $("form#sendFeedback").on('submit',function(e){
+    var formSendfeedback = $("form#sendFeedback");
+    var formAutorization = $("form#loginForm");
+
+    formSendfeedback.on('submit',function(e){
         e.preventDefault();
 
         if(!validate(this)) return false;
 
         //Отправка формы на сервер
+        var formData = new FormData(this);
+
+        //Показываем прелоадер
+        $(this).find('.form-content').css('opacity','0.6');
+        $('.before-load').show();
+
+        $.ajax({
+            url: "/send",
+            type: "POST",
+            dataType: "json",
+            data:formData,
+            processData: false,
+            contentType: false,
+            success: function(data){
+                $('.before-load').hide();
+                formSendfeedback.find('.form-content').css('opacity',"1");
+
+                if (!data['success']){
+                    formSendfeedback.find("h3").before("<small class='error'>"+data['error']+"</small>");
+                } else {
+                    formSendfeedback.replaceWith("<p class='success'>Ваш отзыв успешно отправлен и появится после прохождения модерации</p>")
+                }
+            }
+        });
+    });
+
+    //Обработка формы авторизации
+    formAutorization.on('submit',function(e){
+        e.preventDefault();
+
+        if(!validate(this)) return false;
+
+         //Отправка формы на сервер
         var formData = new FormData(this);
 
         $.ajax({
@@ -19,82 +54,94 @@ $(document).ready(function (){
             contentType: false,
             success: function(data){
                 if (!data['success']){
-                    $('form#sendFeedback').find("h3").before("<small class='error'>"+data['error']+"</small>");
+                    formAutorization.find("h3").after("<small class='error'>"+data['error']+"</small>");
                 } else {
-                    $('form#sendFeedback').replaceWith("<p class='success'>Ваш отзыв успешно отправлен и появится после прохождения модерации</p>")
+                    window.location.href = "/admin";
                 }
             }
         });
     });
 
-
     //Предварительный просмотр
+
+    formSendfeedback.find("input[name='file']").on("change",function() {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('.preview-item .feedback-image img').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+
     $("a.preview").on("click",function(e){
         e.preventDefault();
 
-        var form = $("form#sendFeedback");
+        if(!validate(formSendfeedback)) return false;
 
-        if(!validate(form)) return false;
+        var name = formSendfeedback.find("input[name='name']").val();
+        var email = formSendfeedback.find("input[name='email']").val();
+        var text =formSendfeedback.find("textarea").val();
 
-        var name = form.find("input[name='name']").val();
-        var email = form.find("input[name='email']").val();
-        var text =form.find("textarea").val();
+        var input = formAutorization.find("input[name='file']");
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                imageSrc = e.target.result;
+                $('.feedback-image img').attr('src', imageSrc);
+            };
+        }
 
         Data = new Date();
         var date = Data.toLocaleDateString();
 
-        var preveiwFeedback = "  <div class=\"feedbacks-item previewFeedback\">\n" +
-            "                        <div class=\"feedback-info\">\n" +
-            "                            <div class=\"contacts\">\n" +
-            "                                <p class=\"author\">"+name+"</p>\n" +
-            "                                <p class=\"email\">"+email+"</p>\n" +
-            "                            </div>\n" +
-            "                            <div class=\"date\">\n" +
-            "                                <p>"+date+"</p>\n" +
-            "                            </div>\n" +
-            "                        </div>\n" +
-            "                        <div style=\"clear:both\"></div>\n" +
-            "                        <div class=\"feedback-text\">\n" +
-            "                            <p>"+text+"</p>\n" +
-            "                        </div>\n" +
-            "                    </div>";
+        var previewDiv = $(".preview-item");
 
-        form.before(preveiwFeedback);
+        previewDiv.find(".author").text(name);
+        previewDiv.find(".email").text(email);
+        previewDiv.find(".date").text(date);
+        previewDiv.find(".feedback-text p").text(text);
+        previewDiv.show();
+
+
     });
 
-});
+    //Валидация полей формы
+    function validate(form){
+        var error = false;
 
-//Валидация полей формы
-function validate(form){
-    var error = false;
+        //Сброс ошибок валидации
+        $(".error").remove();
+        $(form).find("input[type='text'], textarea").css("border","");
 
-    //Сброс ошибок валидации
-    $(".error").remove();
-    $(form).find("input[type='text'], textarea").css("border","");
+        //Сброс предварительного просмотра, если есть
+        $(".preview-item").hide();
 
-    //Сброс предварительного просмотра, если есть
-    $(".previewFeedback").remove();
-
-    //Валидация данных
-    $(form).find("input[type='text'], textarea").each(function(index,value){
-        if($(this).val() == ''){
-            $(this).css("border","2px solid red");
-            $(this).before("<small class='error'>*Поле обязательно для заполнения!</small>");
-            error = true;
-            return false;
-        }
-
-        if ($(this).attr("name") == "email"){
-            var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-
-            if(reg.test($(this).val()) == false) {
+        //Валидация данных
+        $(form).find("input[type='text'], input[type='password'],textarea").each(function(index,value){
+            if($(this).val() == ''){
                 $(this).css("border","2px solid red");
-                $(this).before("<small class='error'>*Введите корректный e-mail!</small>");
+                $(this).before("<small class='error'>*Поле обязательно для заполнения!</small>");
                 error = true;
                 return false;
             }
-        }
-    });
 
-    return !error;
-}
+            if ($(this).attr("name") == "email"){
+                var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
+                if(reg.test($(this).val()) == false) {
+                    $(this).css("border","2px solid red");
+                    $(this).before("<small class='error'>*Введите корректный e-mail!</small>");
+                    error = true;
+                    return false;
+                }
+            }
+        });
+
+        return !error;
+    }
+});
+

@@ -7,6 +7,12 @@ use app\models\Database;
 
 class AjaxController
 {
+    //Параметры сохранения изображений
+    private $_resolution_width = 320;
+    private $_resolution_height = 240;
+    private $_resolution_thimb_width = 60;
+    private $_resolution_thumb_height = 60;
+
     /*
      * Обработка данных из форм
      */
@@ -42,25 +48,129 @@ class AjaxController
             $errorMessage = "Ошибка отправки формы: не задано текст отзыва";
         }
 
+        if (isset($_FILES['file'])){
+            if ($_FILES['file']['error']){
+                $errorMessage = "Ошибка загрузки файла";
+            }
+
+            //Валидация формата загруженного файла
+            $formats = [
+                "image/jpeg",
+                "image/png",
+                "image/gif"
+            ];
+
+            if (!in_array($_FILES['file']['type'],$formats)){
+                $errorMessage = "Ошибка отправки формы: некорректный формат изображения";
+            }
+
+            $image = $this->resize($_FILES['file'],$this->_resolution_width,$this->_resolution_height);
+
+            $_FILES['file']['name'] = str_replace(".","_thumb.",$_FILES['file']['name']);
+            $thumb = $this->resize($_FILES['file'],$this->_resolution_thimb_width,$this->_resolution_thumb_height);
+
+        }
+
+        if ($errorMessage){
+            $result['success'] = false;
+            $result['error'] = $errorMessage;
+        } else {
+            $db = Database::getInstance();
+            $response = $db->addFeedback($name,$email,$text, $image,$thumb);
+
+            if ($response){
+                $result['success'] = true;
+            } else {
+                $result['success'] = false;
+                $result['error'] = "Ошибка добавления отзыва! Обратитесь в техническую поддержку!";
+            }
+        }
+
+        echo json_encode($result);
+    }
+
+    /*
+     * Обработка формы авторизации
+     */
+    private function sendCredentials(){
+        if (isset($_POST['login'])){
+            $login = addslashes($_POST['login']);
+        } else {
+            $errorMessage = "Ошибка отправки формы: не введен логин";
+        }
+
+        if (isset($_POST['pass'])){
+            $pass = addslashes($_POST['pass']);
+        } else {
+            $errorMessage = "Ошибка отправки формы: не введен пароль";
+        }
+
         if ($errorMessage){
             $result['success'] = false;
             $result['error'] = $errorMessage;
         }
 
         $db = Database::getInstance();
-        $response = $db->addFeedback($name,$email,$text, null);
+        $response = $db->authorize($login, $pass);
 
-        if ($response){
-            $result['success'] = true;
-        } else {
+        if (!$response){
             $result['success'] = false;
-            $result['error'] = "Ошибка добавления отзыва! Обратитесь в техническую поддержку!";
+            $result['error'] = "Неверное имя пользователя или пароль!";
+        } else {
+            $result['success'] = true;
         }
 
         echo json_encode($result);
     }
 
-    private function sendCredentials(){
+    /*
+     * Обрезает загружаемое изображение
+     * @param array $file
+     * @param int $width,$height
+     * @return string
+     */
+    private function resize($file,$width,$height){
+        //Создаем новый файл в зависимости от типа
+        switch ($file['type']){
+            case 'image/jpeg':
+                $source = imagecreatefromjpeg ($file['tmp_name']);
+                break;
+            case 'image/png':
+                $source = imagecreatefrompng ($file['tmp_name']);
+                break;
+            case 'image/gif':
+                $source = imagecreatefromgif ($file['tmp_name']);
+                break;
 
+        }
+
+        //Проверяем ширину и высоту, нужно ли обрезание
+        $w_src = imagesx($source);
+        $h_src = imagesy($source);
+
+        if ($w_src > $width || $h_src > $height) {
+            //Уменьшаем пропорционально ширине или высоте
+            if ($w_src > $h_src){
+                $ratio = $w_src/$width;
+                $w_dest = $width;
+                $h_dest = round($h_src/$ratio);
+            } else {
+                $ratio = $h_src/$height;
+                $w_dest = round($w_src/$ratio);
+                $h_dest = $height;
+            }
+
+            $dest = imagecreatetruecolor($w_dest, $h_dest);
+
+            imagecopyresampled($dest, $source, 0, 0, 0, 0, $w_dest, $h_dest, $w_src, $h_src);
+            imagejpeg($dest, TEMPLATE_DIR . "/files/" . $file['name']);
+            imagedestroy($dest);
+            imagedestroy($source);
+        } else {
+            imagejpeg($source, TEMPLATE_DIR . "/files/" . $file['name']);
+            imagedestroy($source);
+        }
+
+        return $file['name'];
     }
 }

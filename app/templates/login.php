@@ -17,10 +17,11 @@
 <div class="container">
     <div class="row content">
         <div class="col-lg-12">
-            <form id="loginForm" action="">
+            <form id="loginForm" action="/admin" method="post">
                 <h3>Войти в административную панель</h3>
-                <input name ='login'type="text" required placeholder="Логин">
-                <input name ='pass'type="password" required placeholder="Пароль">
+                <input name ='login'type="text" placeholder="Логин">
+                <input name ='pass'type="password" placeholder="Пароль">
+                <input type="text" name="action" value="sendCredentials" hidden>
                 <button>Отправить</button>
             </form>
         </div>

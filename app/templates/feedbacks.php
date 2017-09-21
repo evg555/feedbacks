@@ -42,21 +42,48 @@
                         <div style="clear:both"></div>
                         <div class="feedback-text">
                             <p><?=$feedback['text']?></p>
-                            <small><?=(empty($feedback['changed']) ? "" : "*изменен администратором")?></small>
+                            <small><?=(empty($feedback['changed']) ? "" : "*текст изменен администратором")?></small>
                         </div>
+                        <? if (!empty($feedback['image'])) :?>
+                            <div class="feedback-image">
+                                <img src="<?=TEMPLATE_DIR_URL . "/files/" . $feedback['image']?>" alt="">
+                            </div>
+                        <?endif;?>
                     </div>
                 <?endforeach;?>
+                <div class="feedbacks-item preview-item">
+                    <div class="feedback-info">
+                        <div class="contacts">
+                            <p class="author"></p>
+                            <p class="email"></p>
+                        </div>
+                        <div class="date"></p>
+                        </div>
+                    </div>
+                    <div style="clear:both"></div>
+                    <div class="feedback-text">
+                        <p></p>
+                    </div>
+                    <div class="feedback-image">
+                        <img src="" alt="">
+                    </div>
+                </div>
                 <form id="sendFeedback" method="post">
-                    <h3>Оставить отзыв</h3>
-                    <input name ='name'type="text"placeholder="Имя">
-                    <input name ='email'type="text"placeholder="E-mail">
-                    <textarea name="text"  cols="30" rows="10" placeholder="Текст сообщения"></textarea>
-                    <label for="file">Прикрепить изображение</label>
-                    <input name="file" type="file">
-                    <input type="text" name="action" value="sendfeedback" hidden>
-                    <div class="buttons">
-                        <a class="preview" href="">Предварительный просмотр</a>
-                        <button class="send">Отправить</button>
+                    <div class="before-load">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </div>
+                    <div class="form-content">
+                        <h3>Оставить отзыв</h3>
+                        <input name ='name'type="text"placeholder="Имя">
+                        <input name ='email'type="text"placeholder="E-mail">
+                        <textarea name="text"  cols="30" rows="10" placeholder="Текст сообщения"></textarea>
+                        <label for="file">Прикрепить изображение (JPG, GIF, PNG)</label>
+                        <input name="file" type="file">
+                        <input type="text" name="action" value="sendfeedback" hidden>
+                        <div class="buttons">
+                            <a class="preview" href="">Предварительный просмотр</a>
+                            <button class="send">Отправить</button>
+                        </div>
                     </div>
                 </form>
             </div>
