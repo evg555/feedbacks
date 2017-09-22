@@ -5,10 +5,6 @@
 .feedback-status{
     float: right;
 }
-.send{
-    float: none;
-    margin-top: 50px;
-}
 .content{
     margin: 0 0 100px 0;
 }
@@ -33,4 +29,7 @@
 .feedback-text p:hover{
     cursor: pointer;
     background-color: rgb(226, 244, 245);
+}
+form#saveChangedText{
+    width: 100%;
 }

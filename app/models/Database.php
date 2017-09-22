@@ -164,6 +164,19 @@ class Database
     }
 
     /*
+     * Сохраняет новый текст отзыва в БД
+     * @param ште $id
+     * @param string $text
+     * return mixed|false
+     */
+    public function changeFeedback($id, $text){
+        $query = "UPDATE ".$this->_tableFeadbacks. " 
+                    SET text='$text',changed=1 WHERE id=$id";
+
+        return $this->query($query);
+    }
+
+    /*
      * Выполняет запрос к БД
      * @param string $query
      * return mixed|false

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="<?=TEMPLATE_DIR_URL?>/css/style.css">
     <link rel="stylesheet" href="<?=TEMPLATE_DIR_URL?>/css/admin.css">
     <script src="<?=TEMPLATE_DIR_URL?>/js/custom.js"></script>
+    <script src="<?=TEMPLATE_DIR_URL?>/js/admin.js"></script>
 </head>
 <body>
 <div class="container">
@@ -29,7 +30,6 @@
             <a class="login" href="/">Вернуться на сайт</a>
         </div>
     </div>
-    <a class="send" href="">Сохранить</a>
     <div class="row content">
         <div class="col-lg-12 feedbacks">
             <? foreach($data['feedbacks'] as $feed) :?>
@@ -42,7 +42,7 @@
                          <?endif;?>
                     </div>
                     <div class="feedback-text">
-                        <p><?=$feed['text']?></p>
+                        <p title="Редактировать текст"><?=$feed['text']?></p>
                     </div>
                     <div class="feedback-status">
                         <? if (empty($feed['accept'])):?>
@@ -55,7 +55,6 @@
                 </div>
             <?endforeach;?>
         </div>
-        <a class="send" href="">Сохранить</a>
     </div>
 </div>
 </body>

@@ -14,6 +14,7 @@
     <!-- Custom files -->
     <link rel="stylesheet" href="<?=TEMPLATE_DIR_URL?>/css/style.css">
     <script src="<?=TEMPLATE_DIR_URL?>/js/custom.js"></script>
+    <script src="<?=TEMPLATE_DIR_URL?>/js/feedbacks.js"></script>
 </head>
 <body>
     <div class="container">

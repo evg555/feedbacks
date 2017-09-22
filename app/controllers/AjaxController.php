@@ -78,12 +78,7 @@ class AjaxController
             $db = Database::getInstance();
             $response = $db->addFeedback($name,$email,$text, $image,$thumb);
 
-            if ($response){
-                $result['success'] = true;
-            } else {
-                $result['success'] = false;
-                $result['error'] = "Ошибка добавления отзыва! Обратитесь в техническую поддержку!";
-            }
+            $result = $this->response($response,"Ошибка добавления отзыва! Обратитесь в техническую поддержку!");
         }
 
         echo json_encode($result);
@@ -113,12 +108,7 @@ class AjaxController
         $db = Database::getInstance();
         $response = $db->authorize($login, $pass);
 
-        if (!$response){
-            $result['success'] = false;
-            $result['error'] = "Неверное имя пользователя или пароль!";
-        } else {
-            $result['success'] = true;
-        }
+        $result = $this->response($response,"Неверное имя пользователя или пароль!");
 
         echo json_encode($result);
     }
@@ -195,13 +185,55 @@ class AjaxController
         $db = Database::getInstance();
         $response = $db->changeAccept($id, $accept);
 
-        if (!$response){
-            $result['success'] = false;
-            $result['error'] = "Ошибка одобрения отзыва. Обратитесь в техническую поддержку!";
-        } else {
-            $result['success'] = true;
-        }
+        $result = $this->response($response,"Ошибка одобрения отзыва. Обратитесь в техническую поддержку!");
 
         echo json_encode($result);
+    }
+
+    /*
+     * Сохраняет измененный отчет
+     *
+     */
+    private function saveChangedText(){
+        if (isset($_POST['text'])){
+            $text = addslashes($_POST['text']);
+        } else {
+            $errorMessage = "Ошибка отправки формы: не введен текст отзыва";
+        }
+
+        if (isset($_POST['id']) && is_numeric($_POST['id'])){
+            $id = $_POST['id'];
+        } else {
+            $errorMessage = "Ошибка отправки формы: отсутствует id отзыва";
+        }
+
+        if ($errorMessage){
+            $result['success'] = false;
+            $result['error'] = $errorMessage;
+        }
+
+        $db = Database::getInstance();
+        $response = $db->changeFeedback($id, $text);
+
+        $result = $this->response($response,"Ошибка сохранения отзыва. Обратитесь в техническую поддержку!");
+
+        echo json_encode($result);
+    }
+
+    /*
+     * Обработка результата запроса к БД
+     * @param boolean $response
+     * @param string  $errorMessage
+     * return array
+     */
+    private function response($response, $errorMessage){
+        if ($response){
+            $result['success'] = true;
+        } else {
+            $result['success'] = false;
+            $result['error'] = $errorMessage;
+        }
+
+        return $result;
     }
 }
