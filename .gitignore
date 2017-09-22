@@ -1,4 +1,5 @@
 .idea
-/vendor/my/core/config.php
+*config.php
 /app/templates/files/*
+!*.gitkeep
 
