@@ -57,7 +57,7 @@ $(document).ready(function (){
         var email = formSendfeedback.find("input[name='email']").val();
         var text =formSendfeedback.find("textarea").val();
 
-        var input = formAutorization.find("input[name='file']");
+        var input = formSendfeedback.find("input[name='file']");
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 

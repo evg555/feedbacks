@@ -18,6 +18,8 @@ class Database
             return self::$_instance;
         } else {
             if (@self::$_link = mysqli_connect(MYSQL_HOST,MYSQL_LOGIN,MYSQL_PASS,MYSQL_DB)) {
+                mysqli_set_charset(self::$_link, "utf8");
+
                 self::$_instance = new self;
                 return self::$_instance;
             } else {

@@ -43,7 +43,7 @@
                         <div style="clear:both"></div>
                         <div class="feedback-text">
                             <p><?=$feedback['text']?></p>
-                            <small><?=(empty($feedback['changed']) ? "" : "*текст изменен администратором")?></small>
+                            <small><?=(empty($feedback['changed']) ? "" : "*изменен администратором")?></small>
                         </div>
                         <? if (!empty($feedback['image'])) :?>
                             <div class="feedback-image">
