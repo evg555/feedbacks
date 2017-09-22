@@ -173,4 +173,35 @@ class AjaxController
 
         return $file['name'];
     }
+
+    private function acceptFeedback(){
+        if (isset($_POST['id']) && is_numeric($_POST['id'])){
+            $id = $_POST['id'];
+        } else {
+            $errorMessage = "Ошибка одобрения отзыва. Обратитесь в техническую поддержку!";
+        }
+
+        if (isset($_POST['accept']) && is_numeric($_POST['accept'])){
+            $accept = $_POST['accept'];
+        } else {
+            $errorMessage = "Ошибка отправки формы: не задан или неправильный e-mail";
+        }
+
+        if ($errorMessage){
+            $result['success'] = false;
+            $result['error'] = $errorMessage;
+        }
+
+        $db = Database::getInstance();
+        $response = $db->changeAccept($id, $accept);
+
+        if (!$response){
+            $result['success'] = false;
+            $result['error'] = "Ошибка одобрения отзыва. Обратитесь в техническую поддержку!";
+        } else {
+            $result['success'] = true;
+        }
+
+        echo json_encode($result);
+    }
 }

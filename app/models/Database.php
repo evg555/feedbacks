@@ -134,11 +134,11 @@ class Database
     }
 
     /*
-     * Получаем все тзывы в админку
+     * Получаем все отзывы в админку
      * @return array
      */
     public function getFeedbacksForPanel(){
-        $query = "SELECT a.email,a.name,f.text,f.thumb,DATE_FORMAT(f.created,'%d.%m.%Y') as 'created',f.accept FROM ".$this->_tableFeadbacks. " f
+        $query = "SELECT f.id,a.email,a.name,f.text,f.thumb,DATE_FORMAT(f.created,'%d.%m.%Y') as 'created',f.accept FROM ".$this->_tableFeadbacks. " f
                     LEFT JOIN ".$this->_tableAuthors." a USING (author_id) ORDER BY f.created DESC";
 
         if ($result = $this->query($query)){
@@ -149,6 +149,18 @@ class Database
         } else {
             return false;
         }
+    }
+
+    /*
+     * Меняет статус отзыва
+     * @param int $id, $accept
+     * return mixed|false
+     */
+    public function changeAccept($id, $accept){
+        $query = "UPDATE ".$this->_tableFeadbacks. " 
+                    SET accept=$accept WHERE id=$id";
+
+        return $this->query($query);
     }
 
     /*

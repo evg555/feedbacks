@@ -33,22 +33,14 @@
     <div class="row content">
         <div class="col-lg-12 feedbacks">
             <? foreach($data['feedbacks'] as $feed) :?>
-                <div class="feedbacks-item">
+                <div class="feedbacks-item" data-id="<?=$feed['id']?>">
                     <div class="feedback-info">
                         <? if (!empty($feed['thumb'])):?>
                             <div class="thumb">
                                 <img src="<?=TEMPLATE_DIR_URL . "/files/" . $feed['thumb']?>" alt="">
                             </div>
                          <?endif;?>
-                        <div class="contacts">
-                            <p class="author"><?=$feed['name']?></p>
-                            <p class="email"><?=$feed['email']?></p>
-                        </div>
-                        <div class="date">
-                            <p><?=$feed['created']?></p>
-                        </div>
                     </div>
-                    <div style="clear:both"></div>
                     <div class="feedback-text">
                         <p><?=$feed['text']?></p>
                     </div>

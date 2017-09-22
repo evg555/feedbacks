@@ -63,7 +63,6 @@ $(document).ready(function (){
     });
 
     //Предварительный просмотр
-
     formSendfeedback.find("input[name='file']").on("change",function() {
         if (this.files && this.files[0]) {
             var reader = new FileReader();
@@ -107,6 +106,43 @@ $(document).ready(function (){
         previewDiv.show();
 
 
+    });
+
+    //Принятие илиотклонение отзывов
+    $(".feedback-status a").on('click',function(e){
+        e.preventDefault();
+
+        $(".error").remove();
+
+        var accept;
+        var item  = this;
+
+        if ($(this).hasClass("allow")){
+            accept = 1;
+        } else if ($(this).hasClass("deny")){
+            accept = 0;
+        } else return false;
+
+        //Получаем id тзыва
+        var id = $(this).closest(".feedbacks-item").data("id");
+
+        $.ajax({
+            url: "/send",
+            type: "POST",
+            dataType: "json",
+            data: {
+                action: "acceptFeedback",
+                id: id,
+                accept: accept
+            },
+            success: function(data){
+                if (!data['success']){
+                    $(item).closest(".feedbacks-item").before("<small class='error'>"+data['error']+"</small>");
+                } else {
+                    window.location.href = "/admin";
+                }
+            }
+        });
     });
 
     //Валидация полей формы
