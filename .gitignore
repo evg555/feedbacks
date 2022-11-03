@@ -1,5 +1,7 @@
 .idea
 *config.php
-/app/templates/files/*
+/app/public/files/*
+*.log
+docker/mysql/lib/*
 !*.gitkeep
 

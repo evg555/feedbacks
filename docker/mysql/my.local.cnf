@@ -1,0 +1,90 @@
+#
+# Basic mysql configuration. Use bvat for advanced settings.
+# Parameters set by bvat are stored in /etc/mysql/conf.d/bvat.cnf.
+# If you want to change any parameter, you'll have to redefine it in /etc/mysql/conf.d/z_bx_custom.cnf
+#
+
+[client]
+port = 3306
+#socket = /var/lib/mysql/mysqld.sock
+default-character-set = utf8
+
+[mysqld_safe]
+nice = 0
+#socket = /var/lib/mysql/mysqld.sock
+
+[mysqld]
+
+# Basic mysql server configuration
+user = mysql
+port = 3306
+basedir = /usr
+datadir = /var/lib/mysql
+#socket = /var/lib/mysql/mysqld.sock
+skip-external-locking
+slave-skip-errors=1032,1062
+default-storage-engine = innodb
+pid-file = /var/run/mysql/mysqld.pid
+transaction-isolation = READ-COMMITTED
+max_allowed_packet = 16M
+expire_logs_days = 1
+max_binlog_size = 100M
+max_connections = 800
+wait_timeout = 3600
+net_read_timeout=28800
+net_write_timeout=28800
+slow_query_log=1
+log_slave_updates=1
+sync_binlog = 0
+server-id = 222
+log_bin = mysql-bin
+binlog-format = mixed
+max_binlog_size = 1G
+
+# Cache parameters
+query_cache_type = 0
+query_cache_limit = 128M
+query_cache_size = 128M
+table_open_cache = 4096
+thread_cache_size = 300
+key_buffer_size = 256M
+thread_stack = 256K
+join_buffer_size = 2M
+sort_buffer_size = 2M
+
+# Parameters for temporary tables
+tmpdir = /tmp
+max_heap_table_size     = 512M
+tmp_table_size = 512M
+
+####
+sql_mode=""
+
+# InnoDB parameters
+innodb_data_file_path=ibdata1:12M:autoextend
+innodb_log_files_in_group=2
+innodb_log_file_size=4M
+innodb_file_format=Barracuda
+innodb_default_row_format = DYNAMIC
+innodb_file_per_table
+innodb_buffer_pool_size = 10G
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
+
+# Database charset parameters
+character-set-server = utf8
+collation-server = utf8_unicode_ci
+init-connect = "SET NAMES utf8 COLLATE utf8_unicode_ci"
+skip-character-set-client-handshake
+skip-name-resolve
+
+[mysqldump]
+quick
+quote-names
+max_allowed_packet = 16M
+default-character-set = utf8
+
+[mysql]
+
+[isamchk]
+key_buffer = 16M
