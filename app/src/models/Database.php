@@ -14,7 +14,6 @@ class Database
 {
     protected static $instance;
     protected static $link;
-    //TODO сделать миграции при разворачивании проекта
     protected $tableFeedbacks = 'feedbacks';
     protected $tableAuthors = 'authors';
     protected $tableUsers = 'users';
