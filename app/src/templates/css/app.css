@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        font-family: 'Red Hat Display', sans-serif;
+    }
+}
+
+@layer components {
+    .container {
+        @apply max-w-[1080px]
+    }
+
+    .btn {
+        @apply inline-block max-w-fit font-bold text-base text-white bg-lightblue border-lightblue
+        border-[1px] px-5 py-2 rounded
+    }
+
+    .input {
+        @apply border-black border-[1px] w-full p-3 placeholder-[#969696] rounded
+    }
+
+    .error {
+        @apply text-base text-[12px] text-red-500
+    }
+
+    .success {
+        @apply text-green-700 text-base font-bold
+    }
+}
+
+.before-load {
+    display: none;
+    font-size: 70px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -35px 0 0 -35px;
+    z-index:999;
+}

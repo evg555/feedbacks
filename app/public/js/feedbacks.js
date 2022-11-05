@@ -3,7 +3,7 @@ $(document).ready(function (){
     //Обработка формы добавления отзыва
     var formSendfeedback = $("form#sendFeedback");
 
-    formSendfeedback.on('submit',(e) => {
+    formSendfeedback.on('submit',function(e) {
         e.preventDefault();
 
         if(!validate(this)) return false;
@@ -27,7 +27,7 @@ $(document).ready(function (){
                 formSendfeedback.find('.form-content').css('opacity',"1");
 
                 if (!data['success']){
-                    formSendfeedback.find("h3").before("<small class='error'>"+data['error']+"</small>");
+                    formSendfeedback.find("h3").before("<p class='error'>"+data['error']+"</p>");
                 } else {
                     formSendfeedback.replaceWith("<p class='success'>Ваш отзыв успешно отправлен и появится после прохождения модерации</p>")
                 }
@@ -55,22 +55,25 @@ $(document).ready(function (){
 
         var name = formSendfeedback.find("input[name='name']").val();
         var email = formSendfeedback.find("input[name='email']").val();
-        var text =formSendfeedback.find("textarea").val();
+        var text = formSendfeedback.find("textarea").val();
 
         var input = formSendfeedback.find("input[name='file']");
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function(e) {
-                imageSrc = e.target.result;
-                $('.feedback-image img').attr('src', imageSrc);
-            };
-        }
+        var previewDiv = $(".preview-item");
 
         Data = new Date();
         var date = Data.toLocaleDateString();
 
-        var previewDiv = $(".preview-item");
+        if (input.prop("files") && input.prop("files")[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                imageSrc = e.target.result;
+
+                $('.feedback-image img').attr('src', imageSrc);
+            };
+        } else {
+            previewDiv.find('.feedback-image').remove();
+        }
 
         previewDiv.find(".author").text(name);
         previewDiv.find(".email").text(email);

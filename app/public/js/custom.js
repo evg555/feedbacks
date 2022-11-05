@@ -13,7 +13,7 @@ function validate(form){
     $(form).find("input[type='text'], input[type='password'],textarea").each(function(index,value){
         if($(this).val() == ''){
             $(this).css("border","2px solid red");
-            $(this).before("<small class='error'>*Поле обязательно для заполнения!</small>");
+            $(this).before("<p class='error'>*Поле обязательно для заполнения!</p>");
             error = true;
             return false;
         }
@@ -23,7 +23,7 @@ function validate(form){
 
             if(reg.test($(this).val()) == false) {
                 $(this).css("border","2px solid red");
-                $(this).before("<small class='error'>*Введите корректный e-mail!</small>");
+                $(this).before("<p class='error'>*Введите корректный e-mail!</p>");
                 error = true;
                 return false;
             }

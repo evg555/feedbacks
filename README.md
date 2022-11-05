@@ -10,6 +10,6 @@
 
 
 **Используемые в проекте библиотекм:**
-* Bootsrap 4 http://getbootstrap.com/
+* Tailwindcss 4 https://tailwindcss.com//
 * JQuery http://jquery.com/
 * Font Awesome http://fontawesome.io/

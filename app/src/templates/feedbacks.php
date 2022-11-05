@@ -4,105 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>Отзывы</title>
-    <!-- JQuery files -->
-    <script src="public/js/jquery-3.2.1.min.js"></script>
-    <!-- Font Awesome -->
+
     <link rel="stylesheet" href="public/css/font-awesome.min.css">
-    <!--    TODO: Переписать на tailwindcss-->
-    <!-- Bootstrap files -->
-    <link rel="stylesheet" href="public/css/bootstrap.min.css">
-    <script src="public/js/bootstrap.min.js"></script>
-    <!-- Custom files -->
-    <link rel="stylesheet" href="public/css/style.css">
-    <script src="public/js/custom.js"></script>
-    <script src="public/js/feedbacks.js"></script>
+    <link rel="stylesheet" href="public/css/main.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700;900&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <div class="container">
-        <div class="row header">
-            <div class="col-lg-10">
-                <h1>Отзывы</h1>
-            </div>
-            <div class="col-lg-2">
-                <i class="fa fa-user-o" aria-hidden="true"></i>
-                <a class="login" href="/login">Вход в панель</a>
+    <header>
+        <div class="container">
+            <div class="flex mt-[50px] justify-between items-center">
+                <h1 class="text-4xl font-bold">Отзывы</h1>
+                <div>
+                    <i class="fa fa-user-o" aria-hidden="true"></i>
+                    <a class="login" href="/login">Вход в панель</a>
+                </div>
             </div>
         </div>
+    </header>
 
-        <div class="row content">
-            <div class="col-lg-9 feedbacks">
-                <? foreach ($this->data as $feedback) {?>
-                    <div class="feedbacks-item">
-                        <div class="feedback-info">
+    <section>
+        <div class="container">
+            <div class="flex mt-20 gap-28">
+                <div class="feedbacks w-[75%]">
+                    <? foreach ($this->data as $feedback) {?>
+                        <div class="feedbacks-item bg-lightgrey p-6 mb-[70px]">
+                            <div class="feedback-info flex justify-between mb-7">
+                                <div class="contacts">
+                                    <p class="author text-base"><?=$feedback['name']?></p>
+                                    <p class="email text-base italic"><?=$feedback['email']?></p>
+                                </div>
+                                <div class="date">
+                                    <p><?=$feedback['created']?></p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-12">
+                                <? if (!empty($feedback['image'])) {?>
+                                    <div class="feedback-image w-80">
+                                        <img src="public/files/<?=$feedback['image']?>" alt="">
+                                    </div>
+                                <?}?>
+
+                                <div class="feedback-text">
+                                    <p class="text-base"><?=$feedback['text']?></p>
+<!--                                    TODO: изменен администраторов появляеся всегда - баг-->
+                                    <p class="font-bold text-[12px] italic"><?=(empty($feedback['changed']) ? ""
+                                            : "*изменен администратором")?></p>
+                                </div>
+                            </div>
+                        </div>
+                    <?}?>
+
+                    <div class="feedbacks-item preview-item bg-lightgrey p-6 mb-[70px] border-[3px] border-darkblue
+                        border-dashed hidden">
+                        <div class="feedback-info flex justify-between mb-7">
                             <div class="contacts">
-                                <p class="author"><?=$feedback['name']?></p>
-                                <p class="email"><?=$feedback['email']?></p>
+                                <p class="author text-base"></p>
+                                <p class="email text-base italic"></p>
                             </div>
-                            <div class="date">
-                                <p><?=$feedback['created']?></p>
+                            <div class="date"></div>
+                        </div>
+
+                        <div class="flex gap-12">
+                            <div class="feedback-image w-80">
+                                <img src="" alt="">
                             </div>
-                        </div>
 
-                        <div style="clear:both"></div>
-
-                        <div class="feedback-text">
-                            <p><?=$feedback['text']?></p>
-                            <small><?=(empty($feedback['changed']) ? "" : "*изменен администратором")?></small>
+                            <div class="feedback-text">
+                                <p class="text-base"></p></div>
                         </div>
-
-                        <? if (!empty($feedback['image'])) {?>
-                            <div class="feedback-image">
-                                <img src="public/files/<?=$feedback['image']?>" alt="">
-                            </div>
-                        <?}?>
-                    </div>
-                <?}?>
-
-                <div class="feedbacks-item preview-item">
-                    <div class="feedback-info">
-                        <div class="contacts">
-                            <p class="author"></p>
-                            <p class="email"></p>
-                        </div>
-                        <div class="date"></p>
-                        </div>
-                    </div>
-                    <div style="clear:both"></div>
-                    <div class="feedback-text">
-                        <p></p>
-                    </div>
-                    <div class="feedback-image">
-                        <img src="" alt="">
                     </div>
                 </div>
 
-                <form id="sendFeedback" method="post">
+                <div class="sidebar w-[25%]">
+                    <h3 class="text-2xl font-medium">Сортировать по:</h3>
+
+                    <ul class="mt-3">
+                        <li class="text-lightblue text-base"><a href="?sort=byDate">дате</a></li>
+                        <li class="text-lightblue text-base"><a href="?sort=byAuthor">автору</a></li>
+                        <li class="text-lightblue text-base"><a href="?sort=byEmail">email</a></li>
+                    </ul>
+                <div>
+            </div>
+        </div>
+    </section>
+
+    <section id="form">
+        <div class="container mb-[50px]">
+            <div class="max-w-sm">
+                <form class="relative" id="sendFeedback" method="post">
                     <div class="before-load">
                         <i class="fa fa-spinner fa-spin"></i>
                     </div>
-                    <div class="form-content">
-                        <h3>Оставить отзыв</h3>
-                        <input name ='name' type="text" placeholder="Имя">
-                        <input name ='email' type="text" placeholder="E-mail">
-                        <textarea name="text"  cols="30" rows="10" placeholder="Текст сообщения"></textarea>
-                        <label for="file">Прикрепить изображение (JPG, GIF, PNG)</label>
-                        <input name="file" type="file">
+
+                    <div class="form-content flex flex-col">
+                        <h3 class="text-2xl font-medium mb-4">Оставить отзыв</h3>
+                        <input class="input mb-3" name="name" type="text" placeholder="Имя">
+                        <input class="input mb-3" name="email" type="text" placeholder="E-mail">
+                        <textarea class="input mb-5" name="text"  cols="30" rows="10"
+                                  placeholder="Текст сообщения"></textarea>
+                        <label class="text-base mb-5" for="file">Прикрепить изображение (JPG, GIF, PNG)</label>
+                        <input name="file" type="file" accept=".jpg, .jpeg, .png, .gif">
                         <input type="text" name="action" value="sendFeedback" hidden>
-                        <div class="buttons">
-                            <a class="preview" href="">Предварительный просмотр</a>
-                            <button class="send">Отправить</button>
+
+                        <div class="buttons mt-5">
+                            <a class="preview inline-block mb-5 max-w-fit font-bold text-base
+                                text-lightblue" href="">ПРЕДВАРИТЕЛЬНЫЙ ПРОСМОТР</a>
+                            <button class="send btn">ОТПРАВИТЬ</button>
                         </div>
                     </div>
                 </form>
             </div>
-
-            <div class="col-lg-3 sidebar">
-                <h4>Сортировать по:</h4>
-                <a href="?sort=byDate">дате</a>
-                <a href="?sort=byAuthor">автору</a>
-                <a href="?sort=byEmail">e-mail</a>
-            </div>
         </div>
-    </div>
+    </section>
+
+    <script src="public/js/jquery-3.2.1.min.js"></script>
+    <script src="public/js/custom.js"></script>
+    <script src="public/js/feedbacks.js"></script>
 </body>
 </html>

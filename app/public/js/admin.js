@@ -29,7 +29,7 @@ $(document).ready(function (){
             },
             success: function(data){
                 if (!data['success']){
-                    $(item).closest(".feedbacks-item").before("<small class='error'>"+data['error']+"</small>");
+                    $(item).closest(".feedbacks-item").before("<p class='error'>"+data['error']+"</p>");
                 } else {
                     window.location.href = "/admin";
                 }
@@ -37,19 +37,25 @@ $(document).ready(function (){
         });
     });
 
-    //Редактировнаие текста отзыва
+    //Редактирование текста отзыва
     $(".feedback-text p").on('click', function() {
         $("form#saveChangedText").remove();
+        $(".error").hide();
+        $(".success").hide();
 
         var id = $(this).closest(".feedbacks-item").data("id");
         var text = $(this).text();
 
-        var form = "<form id='saveChangedText' class='row' method='post'>" +
-            "           <textarea name='text' rows='3' class='col-lg-10'>"+text+"</textarea>" +
-            "           <input type='text' name='id' value='"+id+"' hidden>" +
-            "           <input type='text' name='action' value='saveChangedText' hidden>" +
-            "           <button class='send'>Сохранить</button>" +
-            "       </form>";
+        var form = "<form id='saveChangedText' method='post'>" +
+                        "<div class='flex w-full justify-between items-center mb-8'>" +
+                            "<div class='w-full'>" +
+                                "<textarea class='input w-[95%]' name='text' rows='3'>"+text+"</textarea>" +
+                                "<input type='text' name='id' value='"+id+"' hidden>" +
+                                "<input type='text' name='action' value='saveChangedText' hidden>" +
+                            "</div>" +
+                            "<button class='send btn'>СОХРАНИТЬ</button>" +
+                        "</div>" +
+                    "</form>";
 
         $(this).closest(".feedbacks-item").after(form);
     });
@@ -62,6 +68,7 @@ $(document).ready(function (){
 
         //Отправка формы на сервер
         var formData = new FormData(this);
+        var id = formData.get('id');
 
         $.ajax({
             url: "/send",
@@ -72,9 +79,10 @@ $(document).ready(function (){
             contentType: false,
             success: function(data){
                 if (!data['success']){
-                    $("form#saveChangedText").before("<small class='error'>"+data['error']+"</small>");
+                    $("form#saveChangedText").before("<p class='error text-base mb-8'>"+data['error']+"</p>");
                 } else {
-                    $("form#saveChangedText").replaceWith("<p class='success'>Отзыв успешно изменен</p>")
+                    $('[data-id="' + id + '"]').find('.feedback-text > p').text(formData.get('text'));
+                    $("form#saveChangedText").replaceWith("<p class='success mb-8'>Отзыв успешно изменен</p>")
                 }
             }
         });

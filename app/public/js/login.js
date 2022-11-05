@@ -1,4 +1,4 @@
-$(document).ready(function (){
+$(document).ready(function () {
 
     //Обработка формы авторизации
     var formAutorization = $("form#loginForm");
@@ -20,7 +20,7 @@ $(document).ready(function (){
             contentType: false,
             success: function(data){
                 if (!data['success']){
-                    formAutorization.find("h3").after("<small class='error'>"+data['error']+"</small>");
+                    formAutorization.find("h3").after("<p class='error'>"+data['error']+"</p>");
                 } else {
                     window.location.href = "/admin";
                 }

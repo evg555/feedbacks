@@ -4,4 +4,5 @@
 *.log
 docker/mysql/lib/*
 !*.gitkeep
+app/public/css/main.css
 
