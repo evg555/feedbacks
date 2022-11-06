@@ -5,4 +5,4 @@
 docker/mysql/lib/*
 !*.gitkeep
 app/public/css/main.css
-
+node_modules

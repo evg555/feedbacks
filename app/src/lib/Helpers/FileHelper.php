@@ -8,10 +8,10 @@ namespace src\lib\Helpers;
  */
 class FileHelper
 {
-    private static $width = 320;
-    private static $height = 240;
-    private static $thumbWidth = 60;
-    private static $thumbHeight = 60;
+    private static int $width = 320;
+    private static int $height = 240;
+    private static int $thumbWidth = 60;
+    private static int $thumbHeight = 60;
 
     /**
      * @param $file

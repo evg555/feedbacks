@@ -213,7 +213,7 @@ class Database
     public function changeFeedback($id, $text)
     {
         $query = "UPDATE " . $this->tableFeedbacks . " 
-                    SET text='$text',changed=1 WHERE id=$id";
+                    SET text='$text',changed=now() WHERE id=$id";
 
         return $this->query($query);
     }

@@ -23,7 +23,7 @@ create table feedbacks
     image     varchar(100)                               null,
     created   datetime         default CURRENT_TIMESTAMP null,
     accept    tinyint unsigned default 0                 not null,
-    changed   datetime         default CURRENT_TIMESTAMP null,
+    changed   datetime                                   null,
     thumb     varchar(100)                               null,
     author_id bigint unsigned                            not null,
 

@@ -57,7 +57,6 @@
 
                                 <div class="feedback-text">
                                     <p class="text-base"><?=$feedback['text']?></p>
-<!--                                    TODO: изменен администраторов появляеся всегда - баг-->
                                     <p class="font-bold text-[12px] italic"><?=(empty($feedback['changed']) ? ""
                                             : "*изменен администратором")?></p>
                                 </div>
