@@ -6,7 +6,7 @@ networks:
 
 services:
   php:
-    build: ./php
+    image: evg555/php
     volumes:
 #      - ./php/php7.4.ini:/usr/local/etc/php/php.ini:delegated
       - ./php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:delegated
@@ -23,7 +23,7 @@ services:
       - app
 
   mysql:
-    build: ./mysql
+    image: evg555/mysql
     ports:
       - "3306:3306"
     restart: always
