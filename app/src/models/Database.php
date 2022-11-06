@@ -62,7 +62,7 @@ class Database
      * @param string $type
      * @return array
      */
-    public function getAllFeedbacks(string $type = 'byDate'): ?array
+    public function getAllFeedbacks(string $type = 'byDate'): array
     {
         //Типы сортировки
         $types = ['byDate' => 'f.created', 'byAuthor' => 'a.name', 'byEmail' => 'a.email'];
@@ -79,6 +79,7 @@ class Database
         }
 
         $result = $this->query($query);
+        $feeds = [];
 
         if ($result) {
             while ($row = mysqli_fetch_assoc($result)) {
@@ -87,7 +88,7 @@ class Database
 
             return $feeds;
         } else {
-            return null;
+            return [];
         }
     }
 

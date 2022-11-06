@@ -5,32 +5,20 @@ networks:
     driver: bridge
 
 services:
-  nginx:
-    build: ./nginx
+  php:
+    build: ./php
     volumes:
-      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}:cached
-      - ${APP_CODE_PATH_HOST}/logs/nginx/:/var/log/nginx:delegated
-      - ./nginx/sites/:/etc/nginx/sites-available:delegated
-    ports:
-      - "80:80"
-    depends_on:
-      - php-fpm
-      - mysql
-    networks:
-      - app
-
-  php-fpm:
-    build: ./php-fpm
-    volumes:
-      - ./php-fpm/php7.3.ini:/usr/local/etc/php/php.ini:delegated
-      - ./php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:delegated
-      - ./php-fpm/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini:delegated
+#      - ./php/php7.4.ini:/usr/local/etc/php/php.ini:delegated
+      - ./php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:delegated
       - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}:delegated
     expose:
       - "9000"
+    ports:
+      - "80:80"
     environment:
       - PHP_IDE_CONFIG=serverName=localhost
-      - FAKETIME=-0
+    depends_on:
+      - mysql
     networks:
       - app
 
@@ -47,7 +35,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     volumes:
 #      - './mysql/lib/mysql:/var/lib/mysql:delegated'
-      - './mysql/my.local.cnf:/etc/mysql/conf.d/my.local.cnf'
+#      - './mysql/my.local.cnf:/etc/mysql/conf.d/my.local.cnf'
       - './mysql/init:/docker-entrypoint-initdb.d'
     networks:
       - app

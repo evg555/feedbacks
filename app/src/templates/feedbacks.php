@@ -30,6 +30,12 @@
         <div class="container">
             <div class="flex mt-20 gap-28">
                 <div class="feedbacks w-[75%]">
+                    <?if (empty($this->data)) {?>
+                        <div class="feedbacks-item bg-lightgrey p-6 mb-[70px]">
+                            <p>Отзывов нет</p>
+                        </div>
+                    <?}?>
+
                     <? foreach ($this->data as $feedback) {?>
                         <div class="feedbacks-item bg-lightgrey p-6 mb-[70px]">
                             <div class="feedback-info flex justify-between mb-7">
