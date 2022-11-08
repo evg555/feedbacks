@@ -4,8 +4,11 @@ namespace src\controllers;
 
 use Exception;
 use src\lib\Helpers\FileHelper;
-use src\lib\Validators\FormValidator;
-use src\models\Database ;
+use src\lib\Services\Validation\AcceptValidation;
+use src\lib\Services\Validation\ChangedTextValidation;
+use src\lib\Services\Validation\CredentialValidaton;
+use src\lib\Services\Validation\FormValidation;
+use src\models\Database;
 
 /**
  * Class AjaxController
@@ -25,20 +28,20 @@ class AjaxController
         } else {
             throw new Exception("Ошибка отправки формы: не существует метода для обработки формы");
         }
+
+        //TODO: Убрать дублирование кода и вынести ошибки через исключения ValidationException
     }
 
     /*
      * Обработка формы добавления отзыва
+     *  @
      */
     private function sendFeedback()
     {
-        $validate = FormValidator::validate();
+        $validate = FormValidation::validate();
 
         if ($validate['status'] === 'error') {
-            $result['success'] = false;
-            $result['error'] = $validate['message'];
-
-            echo json_encode($result);
+            $this->sendError($validate['message']);
             return;
         }
 
@@ -51,7 +54,6 @@ class AjaxController
             $thumb = FileHelper::resize($_FILES['file'], true);
         }
 
-
         $db = Database::getInstance();
         $response = $db->addFeedback(
             $validate['data']['name'],
@@ -61,9 +63,7 @@ class AjaxController
             $thumb
         );
 
-        $result = $this->response($response,"Ошибка добавления отзыва");
-
-        echo json_encode($result);
+        $this->response($response,"Ошибка добавления отзыва");
     }
 
     /*
@@ -71,58 +71,32 @@ class AjaxController
      */
     private function sendCredentials()
     {
-        if (isset($_POST['login'])){
-            $login = addslashes($_POST['login']);
-        } else {
-            $errorMessage = "Ошибка отправки формы: не введен логин";
-        }
+        $validate = CredentialValidaton::validate();
 
-        if (isset($_POST['pass'])){
-            $pass = addslashes($_POST['pass']);
-        } else {
-            $errorMessage = "Ошибка отправки формы: не введен пароль";
-        }
-
-        if ($errorMessage){
-            $result['success'] = false;
-            $result['error'] = $errorMessage;
+        if ($validate['status'] === 'error') {
+            $this->sendError($validate['message']);
+            return;
         }
 
         $db = Database::getInstance();
-        $response = $db->authorize($login, $pass);
+        $response = $db->authorize($validate['data']['login'], $validate['data']['pass']);
 
-        $result = $this->response($response,"Неверное имя пользователя или пароль!");
-
-        echo json_encode($result);
+        $this->response($response,"Неверное имя пользователя или пароль!");
     }
-
-
 
     private function acceptFeedback()
     {
-        if (isset($_POST['id']) && is_numeric($_POST['id'])){
-            $id = $_POST['id'];
-        } else {
-            $errorMessage = "Ошибка одобрения отзыва";
-        }
+        $validate = AcceptValidation::validate();
 
-        if (isset($_POST['accept']) && is_numeric($_POST['accept'])){
-            $accept = $_POST['accept'];
-        } else {
-            $errorMessage = "Ошибка отправки формы: не задан или неправильный e-mail";
-        }
-
-        if ($errorMessage){
-            $result['success'] = false;
-            $result['error'] = $errorMessage;
+        if ($validate['status'] === 'error') {
+            $this->sendError($validate['message']);
+            return;
         }
 
         $db = Database::getInstance();
-        $response = $db->changeAccept($id, $accept);
+        $response = $db->changeAccept($validate['data']['id'], $validate['data']['accept']);
 
-        $result = $this->response($response,"Ошибка одобрения отзыва");
-
-        echo json_encode($result);
+        $this->response($response,"Ошибка одобрения отзыва");
     }
 
     /*
@@ -131,47 +105,41 @@ class AjaxController
      */
     private function saveChangedText()
     {
-        if (isset($_POST['text'])){
-            $text = addslashes($_POST['text']);
-        } else {
-            $errorMessage = "Ошибка отправки формы: не введен текст отзыва";
-        }
+        $validate = ChangedTextValidation::validate();
 
-        if (isset($_POST['id']) && is_numeric($_POST['id'])){
-            $id = $_POST['id'];
-        } else {
-            $errorMessage = "Ошибка отправки формы: отсутствует id отзыва";
-        }
-
-        if ($errorMessage){
-            $result['success'] = false;
-            $result['error'] = $errorMessage;
+        if ($validate['status'] === 'error') {
+            $this->sendError($validate['message']);
+            return;
         }
 
         $db = Database::getInstance();
-        $response = $db->changeFeedback($id, $text);
+        $response = $db->changeFeedback($validate['data']['id'], $validate['data']['text']);
 
-        $result = $this->response($response,"Ошибка сохранения отзыва");
-
-        echo json_encode($result);
+        $this->response($response,"Ошибка сохранения отзыва");
     }
 
-    /*
-     * Обработка результата запроса к БД
+    /**
      * @param $response
      * @param $errorMessage
-     *
-     * @return array
      */
     private function response($response, $errorMessage)
     {
         if ($response){
             $result['success'] = true;
+            echo json_encode($result);
         } else {
-            $result['success'] = false;
-            $result['error'] = $errorMessage;
+            $this->sendError($errorMessage);
         }
+    }
 
-        return $result;
+    /**
+     * @param string $message
+     */
+    private function sendError(string $message): void
+    {
+        $result['success'] = false;
+        $result['error'] = $message;
+
+        echo json_encode($result);
     }
 }
