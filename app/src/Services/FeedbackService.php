@@ -3,7 +3,6 @@
 namespace src\Services;
 
 use src\DTO\FeedbackDTO;
-use src\Exceptions\DatabaseException;
 use src\Exceptions\FileCreateException;
 use src\Exceptions\ServiceException;
 use src\Helpers\UUID;
@@ -28,7 +27,6 @@ class FeedbackService implements FeedbackServiceInterface
      * @param FeedbackDTO $dto
      *
      * @throws ServiceException
-     * @throws DatabaseException
      * @throws FileCreateException
      */
     public function create(FeedbackDTO $dto)

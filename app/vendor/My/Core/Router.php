@@ -2,8 +2,13 @@
 
 namespace vendor\My\Core;
 
+use src\Controllers\AdminController;
+use src\Controllers\AjaxController;
+use src\Controllers\BaseControler;
+use src\Controllers\LoginController;
 use src\Controllers\MainController;
-use Exception;
+use src\Exceptions\NotFoundException;
+use Throwable;
 
 /**
  * Class Router
@@ -11,30 +16,33 @@ use Exception;
  */
 class Router
 {
-    /**
-     * Определяем маршрут и подгружаем нужный контроллер
-     */
     public function start()
     {
         $url = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 
         $routes = [
-            '/' => ['controller' => 'Main', 'action' => 'index'],
-            '/login' => ['controller' => 'Login', 'action' => 'index'],
-            '/admin' => ['controller' => 'Admin', 'action' => 'index'],
-            '/send' => ['controller' => 'Ajax', 'action' => 'index']
+            '/' => ['controller' => MainController::class],
+            '/login' => ['controller' => LoginController::class],
+            '/admin' => ['controller' => AdminController::class],
+            '/send' => ['controller' => AjaxController::class]
         ];
 
         try {
-            if ($routes[$url]) {
-                $controllerName = "\\src\\Controllers\\" . $routes[$url]['controller'] . "Controller";
-                $controller = new $controllerName();
-                $controller->{$routes[$url]['action']}();
-            } else {
-                $controller = new MainController();
-                $controller->index();
+            if (empty($routes[$url])) {
+                throw new NotFoundException('Ошибка: Контроллер не найден');
             }
-        } catch (Exception $e) {
+
+            $container = Application::getInstance()->getContainer();
+            $controllerClass = $routes[$url]['controller'];
+
+            if (!$container->has($controllerClass)) {
+                throw new NotFoundException("Ошибка: Класс $controllerClass не cуществует");
+            }
+
+            /* @var BaseControler $controller */
+            $controller = $container->get($controllerClass);
+            $controller->index();
+        } catch (Throwable $e) {
             echo $e->getMessage();
         }
     }

@@ -1,18 +1,13 @@
-<?php /** @noinspection ALL */
+<?php
 
 namespace src\Controllers;
 
 use Exception;
 use src\DTO\FeedbackDTO;
-use src\Exceptions\DatabaseException;
-use src\Exceptions\FileCreateException;
 use src\Exceptions\NotFoundException;
-use src\Exceptions\ServiceException;
 use src\Exceptions\ValidationException;
-use src\Repositories\FeedbackRepository;
-use src\Repositories\UserRepository;
-use src\Services\FeedbackService;
-use src\Services\UserService;
+use src\Services\FeedbackServiceInterface;
+use src\Services\UserServiceInterface;
 use src\Services\Validation\AcceptValidation;
 use src\Services\Validation\ChangedTextValidation;
 use src\Services\Validation\CredentialValidaton;
@@ -22,15 +17,15 @@ use src\Services\Validation\FormValidation;
  * Class AjaxController
  * @package Controllers
  */
-class AjaxController
+class AjaxController extends BaseControler
 {
-    private FeedbackService $feedbackService;
-    private UserService $userService;
+    private FeedbackServiceInterface $feedbackService;
+    private UserServiceInterface $userService;
 
-    public function __construct()
+    public function __construct(FeedbackServiceInterface $feedbackService, UserServiceInterface $userService)
     {
-        $this->feedbackService = new FeedbackService(new FeedbackRepository());
-        $this->userService = new UserService(new UserRepository());
+        $this->feedbackService = $feedbackService;
+        $this->userService = $userService;
     }
 
     public function index()
@@ -51,14 +46,13 @@ class AjaxController
             $message = $exception->getMessage();
         }
 
-        static::response($result, $message);
+        $this->response($result, $message);
+
+        parent::index();
     }
 
     /**
-     * @throws ServiceException
      * @throws ValidationException
-     * @throws DatabaseException
-     * @throws FileCreateException
      */
     private function sendFeedback()
     {
@@ -69,7 +63,6 @@ class AjaxController
     }
 
     /**
-     * @throws ServiceException
      * @throws ValidationException
      */
     private function sendCredentials()
@@ -80,7 +73,6 @@ class AjaxController
     }
 
     /**
-     * @throws ServiceException
      * @throws ValidationException
      */
     private function acceptFeedback()
@@ -91,7 +83,6 @@ class AjaxController
     }
 
     /**
-     * @throws ServiceException
      * @throws ValidationException
      */
     private function saveChangedText()
@@ -105,24 +96,29 @@ class AjaxController
      * @param bool $isSuccess
      * @param string $errorMessage
      */
-    private static function response(bool $isSuccess, string $errorMessage = '')
+    private function response(bool $isSuccess, string $errorMessage = '')
     {
         if ($isSuccess){
             $result['success'] = true;
-            echo json_encode($result);
+            $this->data = $result;
         } else {
-            static::sendError($errorMessage);
+            $this->sendError($errorMessage);
         }
     }
 
     /**
      * @param string $message
      */
-    private static function sendError(string $message): void
+    private function sendError(string $message): void
     {
         $result['success'] = false;
         $result['error'] = $message;
 
-        echo json_encode($result);
+        $this->data = $result;
+    }
+
+    protected function render()
+    {
+        echo json_encode($this->data);
     }
 }

@@ -4,8 +4,7 @@
 
 namespace src\Controllers;
 use Exception;
-use src\Repositories\FeedbackRepository;
-use src\Services\FeedbackService;
+use src\Services\FeedbackServiceInterface;
 
 /**
  * Class AdminController
@@ -13,11 +12,11 @@ use src\Services\FeedbackService;
  */
 class AdminController extends BaseControler
 {
-    private FeedbackService $feedBackService;
+    private FeedbackServiceInterface $feedBackService;
 
-    public function __construct()
+    public function __construct(FeedbackServiceInterface $feedBackService)
     {
-        $this->feedBackService = new FeedbackService(new FeedbackRepository());
+        $this->feedBackService = $feedBackService;
     }
 
     public function index()

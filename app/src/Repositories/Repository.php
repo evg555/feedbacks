@@ -2,8 +2,7 @@
 
 namespace src\Repositories;
 
-use src\Exceptions\DatabaseException;
-use src\Services\Connection;
+use src\Stores\StoreInterface;
 
 /**
  * Class Repository
@@ -12,15 +11,12 @@ use src\Services\Connection;
 class Repository
 {
     /**
-     * @var Connection
+     * @var StoreInterface
      */
-    protected Connection $db;
+    protected StoreInterface $db;
 
-    /**
-     * @throws DatabaseException
-     */
-    public function __construct()
+    public function __construct(StoreInterface $db)
     {
-        $this->db = Connection::getInstance();
+        $this->db = $db;
     }
 }

@@ -6,20 +6,16 @@ namespace src\Controllers;
  * Class BaseControler
  * @package src\Controllers
  */
-abstract class BaseControler
+class BaseControler
 {
-    /*
-     * Данные передаваемые в View
-     */
     protected array $data = [];
 
-    /**
-     * Экшен по умолчанию
-     */
     public function index()
     {
         $this->render();
     }
 
-    abstract protected function render();
+    protected function render()
+    {
+    }
 }

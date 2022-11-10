@@ -2,8 +2,7 @@
 
 namespace src\Helpers;
 
-use src\Exceptions\DatabaseException;
-use src\Services\Connection;
+use src\Stores\MySqlStore;
 
 /**
  * Class UUID
@@ -15,11 +14,11 @@ class UUID
      * @param string $table
      *
      * @return int|null
-     * @throws DatabaseException
      */
     public static function create(string $table) : ?int
     {
-        $db = Connection::getInstance();
+        //TODO: переписать на синглтон
+        $db = new MySqlStore();
         $lastId = $db->getLastId($table);
 
         return $lastId + 1;

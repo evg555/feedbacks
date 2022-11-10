@@ -1,18 +1,20 @@
 <?php /** @noinspection PhpAssignmentInConditionInspection */
 
-namespace src\Services;
+namespace src\Stores;
 
 use mysqli;
 use mysqli_result;
 use src\Exceptions\DatabaseException;
 
+//TODO: Переписать вызовы через PDO https://habr.com/ru/post/655399/
+
 /**
- * Class Connection
+ * Class MySqlStore
  * @package src\Services
  */
-class Connection
+class MySqlStore implements StoreInterface
 {
-    private static ?Connection $instance = null;
+    private static ?MySqlStore $instance = null;
     /**
      * @var mysqli|false|null
      */
@@ -35,41 +37,24 @@ class Connection
         return $this->insertId;
     }
 
-    /**
-     * @return Connection
-     * @throws DatabaseException
-     */
-    static public function getInstance(): Connection
+    public function __construct()
     {
-        if (self::$instance instanceof self) {
-            return self::$instance;
+        self::$connection = mysqli_connect(
+            MYSQL_HOST,
+            MYSQL_LOGIN,
+            MYSQL_PASS,
+            MYSQL_DB,
+            MYSQL_PORT
+        );
+
+        if (self::$connection) {
+            mysqli_set_charset(self::$connection, 'utf8');
         } else {
-            self::$connection = mysqli_connect(
-                MYSQL_HOST,
-                MYSQL_LOGIN,
-                MYSQL_PASS,
-                MYSQL_DB,
-                MYSQL_PORT
-            );
-
-            if (self::$connection) {
-                mysqli_set_charset(self::$connection, 'utf8');
-
-                self::$instance = new self;
-
-                return self::$instance;
-            } else {
-                throw new DatabaseException('Невозможно уcтановить соединение с БД: ' . mysqli_connect_error());
-            }
+            throw new DatabaseException('Невозможно уcтановить соединение с БД: ' . mysqli_connect_error());
         }
     }
 
-
-    private function __construct()
-    {
-    }
-
-    public function insertOrUpdate(string $table, string $uniqueField, array $fields)
+    public function insertOrUpdate(string $table, string $uniqueField, array $fields): void
     {
         $value = $fields[$uniqueField];
 
@@ -108,11 +93,6 @@ class Connection
         return (int) reset($result);
     }
 
-    /** @noinspection PhpUnused */
-    private function __clone()
-    {
-    }
-
     /**
      * @return bool
      */
@@ -125,7 +105,7 @@ class Connection
      * @param string $table
      * @param array $data
      */
-    public function insert(string $table, array $data)
+    public function insert(string $table, array $data): void
     {
         $query = "INSERT INTO $table SET ";
 
@@ -153,7 +133,7 @@ class Connection
 
     /**
      * @param string $table
-     * @param array $params
+     * @param array|null $params
      *
      * @return array
      */
@@ -230,7 +210,7 @@ class Connection
      *
      * @return bool|mysqli_result
      */
-    public function update(string $table, array $data)
+    public function update(string $table, array $data): void
     {
         $rowId = $data['id'];
         unset($data['id']);
@@ -254,7 +234,7 @@ class Connection
 
         $query .= " WHERE id = $rowId";
 
-        return $this->query($query);
+        $this->query($query);
     }
 
     public function transactionBegin(): void

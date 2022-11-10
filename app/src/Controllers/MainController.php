@@ -3,8 +3,7 @@
 namespace src\Controllers;
 
 use Exception;
-use src\Repositories\FeedbackRepository;
-use src\Services\FeedbackService;
+use src\Services\FeedbackServiceInterface;
 
 /**
  * Class MainController
@@ -12,11 +11,11 @@ use src\Services\FeedbackService;
  */
 class MainController extends BaseControler
 {
-    private FeedbackService $feedbackService;
+    private FeedbackServiceInterface $feedbackService;
 
-    public function __construct()
+    public function __construct(FeedbackServiceInterface $feedbackService)
     {
-        $this->feedbackService = new FeedbackService(new FeedbackRepository());
+        $this->feedbackService = $feedbackService;
     }
 
     public function index()

@@ -1,7 +1,5 @@
 <?php /** @noinspection PhpUnused */
 
-/** @noinspection PhpUnused */
-
 namespace src\Services\Validation;
 
 /**

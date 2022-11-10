@@ -1,13 +1,11 @@
 <?php
 use vendor\My\Core\Loader;
-use vendor\My\Core\Router;
+use vendor\My\Core\Application;
 
-require "./vendor/My/Core/Router.php";
 require "./vendor/My/Core/Loader.php";
 require "./config/app.php";
 
 $loader = new Loader();
 spl_autoload_register([$loader, 'autoLoad']);
 
-$router = new Router();
-$router->start();
+Application::getInstance()->run();

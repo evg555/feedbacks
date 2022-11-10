@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUnused */
+<?php
 
 namespace src\Controllers;
 
@@ -8,7 +8,6 @@ namespace src\Controllers;
  */
 class LoginController extends BaseControler
 {
-    /** @noinspection PhpUnused */
     public function index()
     {
         session_start();
@@ -19,9 +18,6 @@ class LoginController extends BaseControler
         parent::index();
     }
 
-    /**
-     * @noinspection PhpUnused
-     */
     protected function render()
     {
         /** @noinspection PhpIncludeInspection */
