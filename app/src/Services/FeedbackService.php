@@ -4,6 +4,7 @@ namespace src\Services;
 
 use src\DTO\FeedbackDTO;
 use src\Exceptions\DatabaseException;
+use src\Exceptions\FileCreateException;
 use src\Exceptions\ServiceException;
 use src\Helpers\UUID;
 use src\Models\Author;
@@ -16,6 +17,8 @@ use src\Repositories\FeedbackRepositoryInterface;
  */
 class FeedbackService implements FeedbackServiceInterface
 {
+    private FeedbackRepositoryInterface $repository;
+
     public function __construct(FeedbackRepositoryInterface $feedbackRepository)
     {
         $this->repository = $feedbackRepository;
@@ -24,7 +27,9 @@ class FeedbackService implements FeedbackServiceInterface
     /**
      * @param FeedbackDTO $dto
      *
-     * @throws ServiceException|DatabaseException
+     * @throws ServiceException
+     * @throws DatabaseException
+     * @throws FileCreateException
      */
     public function create(FeedbackDTO $dto)
     {

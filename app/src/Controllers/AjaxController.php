@@ -1,10 +1,11 @@
-<?php
+<?php /** @noinspection ALL */
 
 namespace src\Controllers;
 
 use Exception;
 use src\DTO\FeedbackDTO;
 use src\Exceptions\DatabaseException;
+use src\Exceptions\FileCreateException;
 use src\Exceptions\NotFoundException;
 use src\Exceptions\ServiceException;
 use src\Exceptions\ValidationException;
@@ -23,6 +24,9 @@ use src\Services\Validation\FormValidation;
  */
 class AjaxController
 {
+    private FeedbackService $feedbackService;
+    private UserService $userService;
+
     public function __construct()
     {
         $this->feedbackService = new FeedbackService(new FeedbackRepository());
@@ -47,13 +51,14 @@ class AjaxController
             $message = $exception->getMessage();
         }
 
-        $this->response($result, $message);
+        static::response($result, $message);
     }
 
     /**
      * @throws ServiceException
      * @throws ValidationException
      * @throws DatabaseException
+     * @throws FileCreateException
      */
     private function sendFeedback()
     {
@@ -100,20 +105,20 @@ class AjaxController
      * @param bool $isSuccess
      * @param string $errorMessage
      */
-    private function response(bool $isSuccess, string $errorMessage = '')
+    private static function response(bool $isSuccess, string $errorMessage = '')
     {
         if ($isSuccess){
             $result['success'] = true;
             echo json_encode($result);
         } else {
-            $this->sendError($errorMessage);
+            static::sendError($errorMessage);
         }
     }
 
     /**
      * @param string $message
      */
-    private function sendError(string $message): void
+    private static function sendError(string $message): void
     {
         $result['success'] = false;
         $result['error'] = $message;

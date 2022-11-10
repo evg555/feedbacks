@@ -9,10 +9,10 @@ namespace vendor\My\Core;
 class Loader
 {
     /**
-     * Находим и загружаем классы
      * @param string $class
      */
-    public function autoLoad($class){
+    public static function autoLoad(string $class)
+    {
         $arr = explode("\\",$class);
         $className = array_pop($arr);
         $prefix = implode("/",$arr);

@@ -2,7 +2,6 @@
 
 namespace src\Services\Validation;
 
-use Exception;
 use src\Exceptions\ValidationException;
 use src\Services\Validation\Validators\EmailValidator;
 use src\Services\Validation\Validators\FileValidator;
@@ -52,7 +51,7 @@ abstract class Validation
                 $validator = new $validatorClass();
 
                 if (!$validator instanceof Validator) {
-                    throw new Exception('Invalid validator');
+                    throw new ValidationException('Несуществующий валидатор');
                 }
 
                 $validator->validate($field);

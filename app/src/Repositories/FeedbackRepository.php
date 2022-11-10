@@ -21,7 +21,7 @@ class FeedbackRepository extends Repository implements FeedbackRepositoryInterfa
             $sort = 'created';
         }
 
-        $result = $this->db->get('feedbacks', [
+        return $this->db->get('feedbacks', [
             'select' => [
                 'id',
                 'authors.email',
@@ -42,15 +42,11 @@ class FeedbackRepository extends Repository implements FeedbackRepositoryInterfa
                 'accept' => 1
             ]
         ]);
-
-        return $result;
     }
 
     public function getAllforPanel() : array
     {
-        $result = $this->db->get('feedbacks');
-
-        return $result;
+        return $this->db->get('feedbacks');
     }
 
     public function add(Feedback $feedback): bool

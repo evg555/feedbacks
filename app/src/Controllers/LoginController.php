@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
 namespace src\Controllers;
 
 /**
@@ -7,6 +8,7 @@ namespace src\Controllers;
  */
 class LoginController extends BaseControler
 {
+    /** @noinspection PhpUnused */
     public function index()
     {
         session_start();
@@ -18,9 +20,11 @@ class LoginController extends BaseControler
     }
 
     /**
-     * Передаем переменные и рендерим страницу
+     * @noinspection PhpUnused
      */
-    protected function render(){
-        include TEMPLATE_DIR . "/login.php";
+    protected function render()
+    {
+        /** @noinspection PhpIncludeInspection */
+        include TEMPLATE_DIR . "login.php";
     }
 }

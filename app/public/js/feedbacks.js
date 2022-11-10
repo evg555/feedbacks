@@ -1,6 +1,4 @@
 $(document).ready(function (){
-
-    //Обработка формы добавления отзыва
     var formSendfeedback = $("form#sendFeedback");
 
     formSendfeedback.on('submit',function(e) {
@@ -8,10 +6,8 @@ $(document).ready(function (){
 
         if(!validate(this)) return false;
 
-        //Отправка формы на сервер
         var formData = new FormData(this);
 
-        //Показываем прелоадер
         $(this).find('.form-content').css('opacity','0.6');
         $('.before-load').show();
 
@@ -29,7 +25,9 @@ $(document).ready(function (){
                 if (!data['success']){
                     formSendfeedback.find("h3").before("<p class='error'>"+data['error']+"</p>");
                 } else {
-                    formSendfeedback.replaceWith("<p class='success'>Ваш отзыв успешно отправлен и появится после прохождения модерации</p>")
+                    formSendfeedback.replaceWith(
+                    "<p class='success'>Ваш отзыв успешно отправлен и появится после прохождения модерации</p>"
+                    )
                 }
             }
         });

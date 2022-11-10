@@ -1,9 +1,14 @@
 <?php
+/** @noinspection PhpUnused */
 
 namespace src\Services;
 
 use src\DTO\FeedbackDTO;
 
+/**
+ * Interface FeedbackServiceInterface
+ * @package src\Services\FeedbackServiceInterface
+ */
 interface FeedbackServiceInterface
 {
     public function create(FeedbackDTO $dto);

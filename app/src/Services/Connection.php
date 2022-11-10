@@ -1,8 +1,9 @@
-<?php
+<?php /** @noinspection PhpAssignmentInConditionInspection */
 
 namespace src\Services;
 
 use mysqli;
+use mysqli_result;
 use src\Exceptions\DatabaseException;
 
 /**
@@ -20,14 +21,6 @@ class Connection
      * @var bool
      */
     private bool $success = true;
-    /**
-     * @var string
-     */
-    protected string $tableFeedbacks = 'feedbacks';
-    /**
-     * @var string
-     */
-    protected string $tableAuthors = 'authors';
 
     /**
      * @var int
@@ -46,12 +39,12 @@ class Connection
      * @return Connection
      * @throws DatabaseException
      */
-    static public function getInstance()
+    static public function getInstance(): Connection
     {
         if (self::$instance instanceof self) {
             return self::$instance;
         } else {
-            @self::$connection = mysqli_connect(
+            self::$connection = mysqli_connect(
                 MYSQL_HOST,
                 MYSQL_LOGIN,
                 MYSQL_PASS,
@@ -85,11 +78,11 @@ class Connection
         }
 
         if (is_string($value)) {
-            $value = "'{$value}'";
+            $value = "'$value'";
         }
 
-        $query = "SELECT id from {$table} WHERE {$uniqueField} = {$value} 
-                    ORDER BY {$uniqueField} LIMIT 1";
+        $query = "SELECT id from $table WHERE $uniqueField = $value 
+                    ORDER BY $uniqueField LIMIT 1";
 
         $result = $this->query($query)->fetch_row();
 
@@ -109,12 +102,13 @@ class Connection
      */
     public function getLastId(string $table): int
     {
-        $query = "SELECT id from {$table} ORDER BY id DESC LIMIT 1";
+        $query = "SELECT id from $table ORDER BY id DESC LIMIT 1";
         $result = $this->query($query)->fetch_row();
 
         return (int) reset($result);
     }
 
+    /** @noinspection PhpUnused */
     private function __clone()
     {
     }
@@ -133,7 +127,7 @@ class Connection
      */
     public function insert(string $table, array $data)
     {
-        $query = "INSERT INTO {$table} SET ";
+        $query = "INSERT INTO $table SET ";
 
         $fields = [];
         foreach ($data as $field => $value) {
@@ -142,7 +136,7 @@ class Connection
             }
 
             if (is_string($value)) {
-                $value = "'{$value}'";
+                $value = "'$value'";
             }
 
             $fields[] = $field . ' = ' . $value;
@@ -175,17 +169,17 @@ class Connection
                 }
             }
             $select = implode(', ', $params['select']);
-            $query .=  " {$select} ";
+            $query .=  " $select ";
         } else {
             $query .=  " * ";
         }
 
         unset($field);
 
-        $query .= "FROM {$table} ";
+        $query .= "FROM $table ";
 
         if (isset($params['join'])) {
-            $query .= "LEFT JOIN {$params['join']['table']} ON {$table}.{$params['join']['id']} = 
+            $query .= "LEFT JOIN {$params['join']['table']} ON $table.{$params['join']['id']} = 
                 {$params['join']['table']}.id";
         }
 
@@ -199,7 +193,7 @@ class Connection
                 }
 
                 if (is_string($value)) {
-                    $value = "'{$value}'";
+                    $value = "'$value'";
                 }
 
                 $conditions[] = $field . ' = ' . $value;
@@ -233,13 +227,15 @@ class Connection
     /**
      * @param string $table
      * @param array $data
+     *
+     * @return bool|mysqli_result
      */
     public function update(string $table, array $data)
     {
         $rowId = $data['id'];
         unset($data['id']);
 
-        $query = "UPDATE {$table} SET ";
+        $query = "UPDATE $table SET ";
 
         $fields = [];
         foreach ($data as $field => $value) {
@@ -248,7 +244,7 @@ class Connection
             }
 
             if (is_string($value)) {
-                $value = "'{$value}'";
+                $value = "'$value'";
             }
 
             $fields[] = $field . ' = ' . $value;
@@ -256,7 +252,7 @@ class Connection
 
         $query .= implode(', ', $fields);
 
-        $query .= " WHERE id = {$rowId}";
+        $query .= " WHERE id = $rowId";
 
         return $this->query($query);
     }
@@ -274,7 +270,7 @@ class Connection
     /**
      * @param $query
      *
-     * @return bool|\mysqli_result
+     * @return bool|mysqli_result
      */
     private function query($query)
     {

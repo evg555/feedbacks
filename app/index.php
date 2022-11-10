@@ -7,11 +7,7 @@ require "./vendor/My/Core/Loader.php";
 require "./config/app.php";
 
 $loader = new Loader();
-spl_autoload_register([$loader,"autoLoad"]);
-
-//конфигурация приложения
-
-//конфигурация инфраслоя
+spl_autoload_register([$loader, 'autoLoad']);
 
 $router = new Router();
 $router->start();

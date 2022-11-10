@@ -19,7 +19,7 @@ function validate(form){
         }
 
         if ($(this).attr("name") == "email"){
-            var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+            var reg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
 
             if(reg.test($(this).val()) == false) {
                 $(this).css("border","2px solid red");

@@ -1,9 +1,10 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
+/** @noinspection PhpIncludeInspection */
 
 namespace src\Controllers;
 use Exception;
 use src\Repositories\FeedbackRepository;
-use src\Services\Connection;
 use src\Services\FeedbackService;
 
 /**
@@ -12,6 +13,8 @@ use src\Services\FeedbackService;
  */
 class AdminController extends BaseControler
 {
+    private FeedbackService $feedBackService;
+
     public function __construct()
     {
         $this->feedBackService = new FeedbackService(new FeedbackRepository());
@@ -19,13 +22,11 @@ class AdminController extends BaseControler
 
     public function index()
     {
-        //Проверяем, что пользователь залогинен
         session_start();
         if (empty($_SESSION['authorized'])){
             header("Location /login");
         }
 
-        //Выход пользователя из панели
         if (isset($_GET['logout'])){
             unset($_SESSION['user']);
             unset($_SESSION['authorized']);
@@ -34,7 +35,6 @@ class AdminController extends BaseControler
             header('Location: /login');
         }
 
-        //Загружаем отзывы в админку
         try {
             $this->data['feedbacks'] = $this->feedBackService->get('admin');
             $this->data['user'] = $_SESSION['user'];
@@ -45,11 +45,8 @@ class AdminController extends BaseControler
         }
     }
 
-    /**
-     * Передаем переменные и рендерим страницу
-     */
     protected function render()
     {
-        include TEMPLATE_DIR . "/admin.php";
+        include TEMPLATE_DIR . 'admin.php';
     }
 }

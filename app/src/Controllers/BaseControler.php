@@ -21,8 +21,5 @@ abstract class BaseControler
         $this->render();
     }
 
-    /**
-     * Передаем переменные и рендерим страницу
-     */
     abstract protected function render();
 }

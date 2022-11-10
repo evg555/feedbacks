@@ -5,9 +5,9 @@ namespace src\Exceptions;
 use Exception;
 
 /**
- * Class ServiceException
+ * Class FileCreateException
  * @package src\Exceptions
  */
-class ServiceException extends Exception
+class FileCreateException extends Exception
 {
 }

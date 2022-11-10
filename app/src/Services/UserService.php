@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 
 namespace src\Services;
 
@@ -12,9 +12,11 @@ use src\Repositories\UserRepositoryInterface;
  */
 class UserService implements UserServiceInterface
 {
+    private UserRepositoryInterface $userRepository;
+
     public function __construct(UserRepositoryInterface $userRepository)
     {
-        $this->repository = $userRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -29,7 +31,7 @@ class UserService implements UserServiceInterface
         $user->setLogin($login);
         $user->setPassword($password);
 
-        $result = $this->repository->authorize($user);
+        $result = $this->userRepository->authorize($user);
 
         if (!$result) {
             throw new ServiceException('Неверное имя пользователя или пароль!');

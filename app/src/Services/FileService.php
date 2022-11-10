@@ -2,6 +2,7 @@
 
 namespace src\Services;
 
+use src\Exceptions\FileCreateException;
 use src\Helpers\FileHelper;
 
 /**
@@ -12,6 +13,7 @@ class FileService
 {
     /**
      * @return array
+     * @throws FileCreateException
      */
     public static function resizeImage(): array
     {

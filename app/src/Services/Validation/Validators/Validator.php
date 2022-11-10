@@ -24,6 +24,8 @@ abstract class Validator
     abstract public function validate(string $field): void;
 
     /**
+     * @param string $field
+     *
      * @return string
      */
     public function getError(string $field): string

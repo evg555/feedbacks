@@ -1,9 +1,9 @@
-<?php
+<?php /** @noinspection PhpIncludeInspection */
+
 namespace src\Controllers;
 
 use Exception;
 use src\Repositories\FeedbackRepository;
-use src\Services\Connection;
 use src\Services\FeedbackService;
 
 /**
@@ -12,6 +12,8 @@ use src\Services\FeedbackService;
  */
 class MainController extends BaseControler
 {
+    private FeedbackService $feedbackService;
+
     public function __construct()
     {
         $this->feedbackService = new FeedbackService(new FeedbackRepository());
@@ -28,11 +30,8 @@ class MainController extends BaseControler
         }
     }
 
-    /**
-     * Передаем переменные и рендерим страницу
-     */
     protected function render()
     {
-        include TEMPLATE_DIR . "/feedbacks.php";
+        include TEMPLATE_DIR . 'feedbacks.php';
     }
 }

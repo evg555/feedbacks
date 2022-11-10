@@ -2,6 +2,8 @@
 
 namespace src\Helpers;
 
+use src\Exceptions\FileCreateException;
+
 /**
  * Class FileHelper
  * @package src\lib\Helpers
@@ -18,6 +20,7 @@ class FileHelper
      * @param bool $thumb
      *
      * @return string
+     * @throws FileCreateException
      */
     public static function resize($file, bool $thumb = false): string
     {
@@ -32,6 +35,7 @@ class FileHelper
                 $source = imagecreatefromgif($file['tmp_name']);
                 break;
             default:
+                throw new FileCreateException('Неизвестный формат файла');
         }
 
         //Проверяем ширину и высоту, нужно ли обрезание
@@ -58,11 +62,11 @@ class FileHelper
             imagecopyresampled($dest, $source, 0, 0, 0, 0, $outWidth, $outHeight, $srcWidth, $srcHeight);
             imagejpeg($dest, 'public/files/' . $file['name']);
             imagedestroy($dest);
-            imagedestroy($source);
         } else {
             imagejpeg($source,  'public/files/' . $file['name']);
-            imagedestroy($source);
         }
+
+        imagedestroy($source);
 
         return $file['name'];
     }

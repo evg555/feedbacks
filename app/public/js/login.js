@@ -1,6 +1,4 @@
 $(document).ready(function () {
-
-    //Обработка формы авторизации
     var formAutorization = $("form#loginForm");
 
     formAutorization.on('submit',function(e){
@@ -8,7 +6,6 @@ $(document).ready(function () {
 
         if(!validate(this)) return false;
 
-        //Отправка формы на сервер
         var formData = new FormData(this);
 
         $.ajax({

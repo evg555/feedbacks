@@ -9,10 +9,6 @@ namespace src\Models;
 class Author
 {
     /**
-     * @var int
-     */
-    private int $id;
-    /**
      * @var string
      */
     private string $name;
@@ -20,22 +16,6 @@ class Author
      * @var string
      */
     private string $email;
-
-    /**
-     * @return int
-     */
-    public function getId() : int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(int $id) : void
-    {
-        $this->id = $id;
-    }
 
     /**
      * @return string
