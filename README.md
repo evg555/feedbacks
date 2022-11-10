@@ -10,7 +10,8 @@
 5. Написать приложении без использования php фреймворков
 
 
-**Используемые в проекте библиотекм:**
+**Используемые в проекте технологии:**
+* PHP 7.4
 * Docker https://www.docker.com/
 * Nodejs && NPM https://nodejs.org
 * Tailwindcss 4 https://tailwindcss.com//

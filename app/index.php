@@ -1,13 +1,17 @@
 <?php
-use vendor\my\core\Loader;
-use vendor\my\core\Router;
+use vendor\My\Core\Loader;
+use vendor\My\Core\Router;
 
-require "./vendor/my/core/Router.php";
-require "./vendor/my/core/Loader.php";
-require "./src/config/app.php";
+require "./vendor/My/Core/Router.php";
+require "./vendor/My/Core/Loader.php";
+require "./config/app.php";
 
 $loader = new Loader();
 spl_autoload_register([$loader,"autoLoad"]);
+
+//конфигурация приложения
+
+//конфигурация инфраслоя
 
 $router = new Router();
 $router->start();

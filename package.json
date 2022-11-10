@@ -2,8 +2,8 @@
   "name": "feedbacks",
   "version": "1.0.0",
   "scripts": {
-    "watch": "npx tailwindcss -i ./app/src/templates/css/app.css -o ./app/public/css/main.css --watch",
-    "build": "npx tailwindcss -i ./app/src/templates/css/app.css -o ./app/public/css/main.css"
+    "watch": "npx tailwindcss -i app/templates/css/app.css -o ./app/public/css/main.css --watch",
+    "build": "npx tailwindcss -i app/templates/css/app.css -o ./app/public/css/main.css"
   },
   "devDependencies": {
     "tailwindcss": "^3.2.1"

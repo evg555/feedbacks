@@ -35,7 +35,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     volumes:
 #      - './mysql/lib/mysql:/var/lib/mysql:delegated'
-#      - './mysql/my.local.cnf:/etc/mysql/conf.d/my.local.cnf'
+#      - './mysql/My.local.cnf:/etc/mysql/conf.d/My.local.cnf'
       - './mysql/init:/docker-entrypoint-initdb.d'
     networks:
       - app
