@@ -5,7 +5,6 @@ namespace src\Services;
 use src\DTO\FeedbackDTO;
 use src\Exceptions\FileCreateException;
 use src\Exceptions\ServiceException;
-use src\Helpers\UUID;
 use src\Models\Author;
 use src\Models\Feedback;
 use src\Repositories\FeedbackRepositoryInterface;
@@ -44,7 +43,6 @@ class FeedbackService implements FeedbackServiceInterface
         $author->setEmail($dto->email);
 
         $feedback = new Feedback();
-        $feedback->setId(UUID::create('feedbacks'));
         $feedback->setText($dto->text);
         $feedback->setImage($image);
         $feedback->setThumb($thumb);

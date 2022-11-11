@@ -12,13 +12,15 @@ use src\Exceptions\NotFoundException;
  */
 class Container implements ContainerInterface
 {
+    private array $objects;
+
     /**
      * @throws ReflectionException
      * @throws NotFoundException
      */
     public function get(string $id)
     {
-        return $this->prepareObject($id);
+        return $this->objects[$id] ?? $this->prepareObject($id);
     }
 
     /**
@@ -28,14 +30,15 @@ class Container implements ContainerInterface
      */
     public function has(string $id): bool
     {
-        return class_exists($id);
+        return isset($this->objects[$id]) || class_exists($id);
     }
 
     /**
      * @param string $class
      *
-     * @throws ReflectionException
+     * @return mixed
      * @throws NotFoundException
+     * @throws ReflectionException
      */
     private function prepareObject(string $class)
     {
@@ -58,21 +61,31 @@ class Container implements ContainerInterface
         $constructReflector = $classReflection->getConstructor();
 
         if (empty($constructReflector)) {
-            return new $class;
+            $this->set($class);
+            return $this->objects[$class];
         }
 
         $constructParams = $constructReflector->getParameters();
 
         if (empty($constructParams)) {
-            return new $class;
+            $this->set($class);
+            return $this->objects[$class];
         }
 
         $params = [];
         foreach ($constructParams as $param) {
-            $paramtType = $param->getType()->getName();
-            $params[] = $this->get($paramtType);
+            $paramType = $param->getType()->getName();
+            $params[] = $this->get($paramType);
         }
 
-        return new $class(...$params);
+        $this->set($class, $params);
+
+        return $this->objects[$class];
+    }
+
+    private function set(string $class, array $params = []): void
+    {
+        $object = !empty($params) ? new $class(...$params): new $class;
+        $this->objects[$class] = $object;
     }
 }

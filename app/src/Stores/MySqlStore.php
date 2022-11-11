@@ -14,7 +14,6 @@ use src\Exceptions\DatabaseException;
  */
 class MySqlStore implements StoreInterface
 {
-    private static ?MySqlStore $instance = null;
     /**
      * @var mysqli|false|null
      */
@@ -37,6 +36,9 @@ class MySqlStore implements StoreInterface
         return $this->insertId;
     }
 
+    /**
+     * @throws DatabaseException
+     */
     public function __construct()
     {
         self::$connection = mysqli_connect(

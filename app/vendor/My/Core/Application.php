@@ -22,8 +22,6 @@ class Application
         return $this->container;
     }
 
-    private Router $router;
-
     /**
      * @return static
      */
@@ -40,15 +38,15 @@ class Application
     {
     }
 
-    private function clone()
+    private function __clone()
     {
     }
 
     public function run()
     {
         $this->container = new Container();
-        $this->router = new Router();
+        $router = new Router();
 
-        $this->router->start();
+        $router->start();
     }
 }
