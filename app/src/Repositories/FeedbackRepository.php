@@ -58,6 +58,11 @@ class FeedbackRepository extends Repository implements FeedbackRepositoryInterfa
             'email' => $feedback->getAuthor()->getEmail()
         ]);
 
+        if (!$this->db->isSuccess()) {
+            $this->db->transactionRollback();
+            return $this->db->isSuccess();
+        }
+
         $this->db->insert('feedbacks', [
             'text' => $feedback->getText(),
             'image' => $feedback->getImage(),
@@ -65,9 +70,12 @@ class FeedbackRepository extends Repository implements FeedbackRepositoryInterfa
             'author_id' => $this->db->getInsertId()
         ]);
 
-        $this->db->transactionCommit();
+        if (!$this->db->isSuccess()) {
+            $this->db->transactionRollback();
+            return $this->db->isSuccess();
+        }
 
-        return $this->db->isSuccess();
+        return $this->db->transactionCommit();
     }
 
     public function changeText(Feedback $feedback): bool

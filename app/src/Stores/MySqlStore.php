@@ -2,11 +2,10 @@
 
 namespace src\Stores;
 
-use mysqli;
-use mysqli_result;
+use PDO;
+use PDOException;
+use PDOStatement;
 use src\Exceptions\DatabaseException;
-
-//TODO: Переписать вызовы через PDO https://habr.com/ru/post/655399/
 
 /**
  * Class MySqlStore
@@ -15,9 +14,9 @@ use src\Exceptions\DatabaseException;
 class MySqlStore implements StoreInterface
 {
     /**
-     * @var mysqli|false|null
+     * @var PDO
      */
-    private static $connection;
+    private PDO $connection;
     /**
      * @var bool
      */
@@ -41,18 +40,17 @@ class MySqlStore implements StoreInterface
      */
     public function __construct()
     {
-        self::$connection = mysqli_connect(
-            MYSQL_HOST,
-            MYSQL_LOGIN,
-            MYSQL_PASS,
-            MYSQL_DB,
-            MYSQL_PORT
-        );
-
-        if (self::$connection) {
-            mysqli_set_charset(self::$connection, 'utf8');
-        } else {
-            throw new DatabaseException('Невозможно уcтановить соединение с БД: ' . mysqli_connect_error());
+        try {
+            $this->connection = new PDO(
+                'mysql:host=' . MYSQL_HOST . ';dbname=' . MYSQL_DB .';charset=utf8',
+                MYSQL_LOGIN, MYSQL_PASS,
+                [
+                    PDO::ATTR_PERSISTENT => true,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                ]
+            );
+        } catch (PDOException $exception) {
+            throw new DatabaseException('Невозможно уcтановить соединение с БД: ' . $exception->getMessage());
         }
     }
 
@@ -71,28 +69,15 @@ class MySqlStore implements StoreInterface
         $query = "SELECT id from $table WHERE $uniqueField = $value 
                     ORDER BY $uniqueField LIMIT 1";
 
-        $result = $this->query($query)->fetch_row();
+        $id = $this->query($query)->fetchColumn();
 
-        if (!is_null($result)) {
-            $fields['id'] = (int) reset($result);
+        if ($id) {
+            $fields['id'] = (int) $id;
             $this->update($table, $fields);
             $this->insertId = $fields['id'];
         } else {
             $this->insert($table, $fields);
         }
-    }
-
-    /**
-     * @param string $table
-     *
-     * @return int
-     */
-    public function getLastId(string $table): int
-    {
-        $query = "SELECT id from $table ORDER BY id DESC LIMIT 1";
-        $result = $this->query($query)->fetch_row();
-
-        return (int) reset($result);
     }
 
     /**
@@ -126,10 +111,10 @@ class MySqlStore implements StoreInterface
 
         $query .= implode(', ', $fields);
 
-        if (!$this->query($query)) {
-            $this->success = false;
-        } else {
-            $this->insertId = mysqli_insert_id(static::$connection);
+        $result = $this->query($query);
+
+        if ($result instanceof PDOStatement) {
+            $this->insertId = $this->connection->lastInsertId();
         }
     }
 
@@ -195,8 +180,8 @@ class MySqlStore implements StoreInterface
         $result = $this->query($query);
         $data = [];
 
-        if ($result) {
-            while ($row = mysqli_fetch_assoc($result)) {
+        if ($result instanceof PDOStatement) {
+            while ($row = $result->fetch()) {
                 $data[] = $row;
             }
 
@@ -209,8 +194,6 @@ class MySqlStore implements StoreInterface
     /**
      * @param string $table
      * @param array $data
-     *
-     * @return bool|mysqli_result
      */
     public function update(string $table, array $data): void
     {
@@ -241,30 +224,38 @@ class MySqlStore implements StoreInterface
 
     public function transactionBegin(): void
     {
-        static::$connection->begin_transaction();
+        $this->connection->beginTransaction();
     }
 
-    public function transactionCommit(): void
+    /**
+     * @return bool
+     */
+    public function transactionCommit(): bool
     {
-        static::$connection->commit();
+        return $this->connection->commit();
     }
 
     /**
      * @param $query
      *
-     * @return bool|mysqli_result
+     * @return false|PDOStatement
      */
     private function query($query)
     {
         $this->success = true;
         $this->insertId = 0;
 
-        $result = mysqli_query(static::$connection, $query);
+        $result = $this->connection->query($query);
 
-        if ($result === false) {
+        if (!$result) {
             $this->success = false;
         }
 
         return $result;
+    }
+
+    public function transactionRollback() : void
+    {
+        $this->connection->rollBack();
     }
 }

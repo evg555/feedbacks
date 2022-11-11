@@ -36,17 +36,15 @@ interface StoreInterface
 
     public function transactionBegin(): void;
 
-    public function transactionCommit(): void;
+    /**
+     * @return bool
+     */
+    public function transactionCommit(): bool;
+
+    public function transactionRollback(): void;
 
     /**
      * @return bool
      */
     public function isSuccess() : bool;
-
-    /**
-     * @param string $table
-     *
-     * @return int
-     */
-    public function getLastId(string $table): int;
 }

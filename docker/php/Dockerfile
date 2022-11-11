@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y zlib1g-dev libpng-dev libjpeg-dev libgi
 RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ \
     && docker-php-ext-install gd
 
-RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install pdo_mysql
 
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 
