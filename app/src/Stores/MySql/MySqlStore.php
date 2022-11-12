@@ -1,11 +1,12 @@
 <?php /** @noinspection PhpAssignmentInConditionInspection */
 
-namespace src\Stores;
+namespace src\Stores\MySql;
 
 use PDO;
 use PDOException;
 use PDOStatement;
 use src\Exceptions\DatabaseException;
+use src\Stores\StoreInterface;
 
 /**
  * Class MySqlStore
@@ -124,58 +125,15 @@ class MySqlStore implements StoreInterface
      *
      * @return array
      */
-    //TODO: вынести сложную логику в QueryBuilder
     public function get(string $table, array $params = []): array
     {
-        $query =  "SELECT ";
+        $builder = new QueryBuilder($table);
 
-        if (isset($params['select'])) {
-            foreach ($params['select'] as &$field) {
-                if (stripos($field, '.') === false) {
-                    $field = $table . '.' . $field;
-                }
-            }
-            $select = implode(', ', $params['select']);
-            $query .=  " $select ";
-        } else {
-            $query .=  " * ";
-        }
-
-        unset($field);
-
-        $query .= "FROM $table ";
-
-        if (isset($params['join'])) {
-            $query .= "LEFT JOIN {$params['join']['table']} ON $table.{$params['join']['id']} = 
-                {$params['join']['table']}.id";
-        }
-
-        if (isset($params['filter'])) {
-            $query .= ' WHERE ';
-
-            $conditions = [];
-            foreach ($params['filter'] as $field => $value) {
-                if (stripos($field, '.')  === false) {
-                    $field = $table . '.' . $field;
-                }
-
-                if (is_string($value)) {
-                    $value = "'$value'";
-                }
-
-                $conditions[] = $field . ' = ' . $value;
-            }
-
-            $query .= implode(' AND ', $conditions);
-        }
-
-        if (isset($params['sort'])) {
-            if (strpos($params['sort'], '.')  === false) {
-                $params['sort'] = $table . '.' . $params['sort'];
-            }
-
-            $query .= " ORDER BY {$params['sort']} DESC";
-        }
+        $query = $builder->setSelect((array) $params['select'])
+            ->setJoin((array) $params['join'])
+            ->setFilter((array) $params['filter'])
+            ->setSort((string) $params['sort'])
+            ->getQuery();
 
         $result = $this->query($query);
         $data = [];

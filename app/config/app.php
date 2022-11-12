@@ -8,7 +8,7 @@ use src\Services\FeedbackService;
 use src\Services\FeedbackServiceInterface;
 use src\Services\UserService;
 use src\Services\UserServiceInterface;
-use src\Stores\MySqlStore;
+use src\Stores\MySql\MySqlStore;
 use src\Stores\StoreInterface;
 
 const MYSQL_HOST = 'mysql';
